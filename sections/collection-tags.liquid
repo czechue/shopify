@@ -1,0 +1,19 @@
+<div class="page-width">
+    <ul>
+        {% for tag in collection.all_tags %}
+            {% if current_tags contains tag %}
+                  <li class="active" style="background-color: red;">{{ tag | link_to_remove_tag: tag }}</li>
+            {% else %}
+                  <li>{{ tag | link_to_add_tag: tag }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+
+{% schema %}
+{
+    "name": "Collection Tags",
+    "class": "index-section--flush"
+}
+{% endschema %}
