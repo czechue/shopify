@@ -5,6 +5,7 @@
   data-enable-history-state="true"
   data-ajax-enabled="{{ settings.enable_ajax }}"
 >
+
   {% comment %}
     Get first variant, or deep linked one
   {% endcomment %}
@@ -235,6 +236,10 @@
           role="alert"
           aria-hidden="true"
         >{{ 'products.product.loader_label' | t }}</p>
+       
+        {% for tag in product.tags %}
+          <span style="background-color: red; padding: 0 6px; margin: 0 12px;">{{ tag }}</span>
+        {% endfor %}
 
         <div class="product-single__description rte">
           {{ product.description }}

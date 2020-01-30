@@ -362,7 +362,7 @@
       "on_sale": "Sale",
       "sale_price": "Sale price",
       "quantity": "Quantity",
-      "add_to_cart": "Add to cart",
+      "add_to_cart": "Book now",
       "loader_label": "Adding product to your cart",
       "back_to_collection": "Back to {{ title }}",
       "vendor": "Vendor",
