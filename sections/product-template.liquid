@@ -138,10 +138,15 @@
               {%- endif -%}
             </div>
           {%- endif -%}
+          
+          <div class="tags__wrapper">
+            {% for tag in product.tags %}
+              <div class="tags__item">
+                {{ tag }}
+              </div>
+            {% endfor %}
+          </div>
 
-          {% for tag in product.tags %}
-            {{ tag }}
-          {% endfor %}
 
           {% capture "form_classes" -%}
             product-form product-form-{{ section.id }}

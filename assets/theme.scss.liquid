@@ -8700,3 +8700,34 @@ $min-height-disclosure: 92px;
   }
 }
 
+.collection-tags {
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+.tags__wrapper {
+  display: flex;
+}
+
+.tags__item {
+  color: rgba(0, 0, 0, 0.87);
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  margin-left: 8px;
+
+  &:first-of-type {
+    margin-left: 0;
+  }
+
+  &.active {
+    background-color: $color-btn-primary;
+
+    & a {
+      color: $color-btn-primary-text;
+    }
+  }
+}
+
+

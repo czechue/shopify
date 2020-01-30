@@ -1,10 +1,10 @@
 <div class="page-width">
-    <ul>
+    <ul class="collection-tags tags__wrapper">
         {% for tag in collection.all_tags %}
             {% if current_tags contains tag %}
-                  <li class="active" style="background-color: red;">{{ tag | link_to_remove_tag: tag }}</li>
+                  <li class="tags__item active">{{ tag | link_to_remove_tag: tag }}</li>
             {% else %}
-                  <li>{{ tag | link_to_add_tag: tag }}</li>
+                  <li class="tags__item">{{ tag | link_to_add_tag: tag }}</li>
             {% endif %}
         {% endfor %}
     </ul>
