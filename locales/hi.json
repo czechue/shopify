@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "कृपया कोई दूसरा खोज शब्द आज़माएं या <a href=\"{{ link }}\">होमपेज<\/a> पर वापस जाएं.",
       "empty_search_message": "खोज फ़ील्ड खाली नहीं हो सकती है",
-      "results_with_count": {
-        "one": "\"{{ terms }}\" के लिए {{ count }} परिणाम",
-        "other": "\"{{ terms }}\" के लिए {{ count }} परिणाम"
-      },
       "title": "हमारी साइट खोजें",
       "placeholder": "खोजें",
       "submit": "सबमिट करें",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "खोज परिणाम",
         "other": "खोज परिणाम"
+      },
+      "search_for": "खोजें",
+      "loading": "लोड हो रहा है",
+      "clear_search_term": "खोज शर्त को साफ़ करें",
+      "number_of_results": "{{ results_count }} का {{ result_number }}",
+      "products": "उत्पाद",
+      "number_of_results_found": "{{ results_count }} परिणाम मिले",
+      "one_result_found": "1 परिणाम मिला",
+      "no_results": "अपनी वर्तनी जांचकर देखें या किन्हीं दूसरे शब्दों का उपयोग करें.",
+      "results_with_count": {
+        "one": "{{ count }} “{{ terms }}” के लिए परिणाम",
+        "other": "{{ count }} “{{ terms }}” के लिए परिणाम"
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "मुद्रा"
+    },
+    "language": {
+      "dropdown_label": "भाषा"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "विशेष रुप से प्रदर्शित उत्पाद",
-      "gallery_thumbnail_alt": "गैलरी व्यूवर में इमेज लोड करें, {{ imageAlt }}"
+      "gallery_thumbnail_alt": "गैलरी व्यूवर में इमेज लोड करें, {{ imageAlt }}",
+      "video_thumbnail_alt": "गैलरी व्यूवर में वीडियो लोड करें और चलाएं, {{ imageAlt }}",
+      "model_thumbnail_alt": "गैलरी दर्शक में 3D मॉडल लोड करें, {{ imageAlt }}"
     },
     "map": {
       "address_error": "उस पते को देखने में त्रुटि हुई",
@@ -119,7 +131,12 @@
       "read_more": "और अधिक पढ़ें",
       "read_more_title": "अधिक पढ़ें: {{ title }}",
       "back_to_blog": "{{ title }} पर वापस जाएं",
-      "tags": "टैग"
+      "tags": "टैग",
+      "article_with_count": {
+        "one": "1 लेख",
+        "other": "{{ count }} लेख",
+        "zero": "0 लेख"
+      }
     },
     "comments": {
       "title": "टिप्पणी छोड़ें",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "चेकआउट के दौरान <a href=\"{{ link }}\">शिपिंग<\/a> की गणना की गई",
       "unit_price_label": "यूनिट मूल्य",
       "view_cart": "कार्ट देखें",
-      "availability": "उपलब्धता"
+      "availability": "उपलब्धता",
+      "from_lowest_price": "{{ lowest_price }} द्वारा",
+      "view_in_space": "अपनी जगह पर चलाएं",
+      "view_in_space_label": "अपने स्थान में देखें, संवर्धित वास्तविकता विंडो में आइटम लोड करता है"
     }
   },
   "gift_cards": {

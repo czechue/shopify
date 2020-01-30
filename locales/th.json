@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "โปรดลองใช้คำค้นหาอื่นหรือกลับไปที่<a href=\"{{ link }}\">หน้าหลัก<\/a>",
       "empty_search_message": "ไม่สามารถเว้นว่างในช่องค้นหาได้",
-      "results_with_count": {
-        "one": "ผลลัพธ์ {{ count }} รายการสำหรับ \"{{ terms }}\"",
-        "other": "ผลลัพธ์ {{ count }} รายการสำหรับ \"{{ terms }}\""
-      },
       "title": "ค้นหาในเว็บไซต์ของเรา",
       "placeholder": "ค้นหา",
       "submit": "ส่ง",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "ผลลัพธ์การค้นหา",
         "other": "ผลลัพธ์การค้นหา"
+      },
+      "search_for": "ค้นหา",
+      "loading": "กำลังโหลด",
+      "clear_search_term": "ล้างคำค้นหา",
+      "number_of_results": "{{ result_number }} จาก {{ results_count }}",
+      "products": "สินค้า",
+      "number_of_results_found": "พบผลลัพธ์ {{ results_count }} รายการ",
+      "one_result_found": "พบผลลัพธ์ 1 รายการ",
+      "no_results": "ลองตรวจสอบการสะกดคำหรือใช้คำอื่น",
+      "results_with_count": {
+        "one": "ผลลัพธ์ {{ count }} รายการสำหรับ “{{ terms }}”",
+        "other": "ผลลัพธ์ {{ count }} รายการสำหรับ “{{ terms }}”"
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "สกุลเงิน"
+    },
+    "language": {
+      "dropdown_label": "ภาษา"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "สินค้าที่แนะนำ",
-      "gallery_thumbnail_alt": "โหลดรูปภาพลงในเครื่องมือใช้ดูของ Gallery {{ imageAlt }}"
+      "gallery_thumbnail_alt": "โหลดรูปภาพลงในเครื่องมือใช้ดูของ Gallery {{ imageAlt }}",
+      "video_thumbnail_alt": "โหลดและเล่นวิดีโอในเครื่องมือดูของแกลเลอรี {{ imageAlt }}",
+      "model_thumbnail_alt": "โหลดโมเดล 3 มิติลงในเครื่องมือใช้ดูของ Gallery {{ imageAlt }}"
     },
     "map": {
       "address_error": "เกิดข้อผิดพลาดในการค้นหาที่อยู่ดังกล่าว",
@@ -119,7 +131,12 @@
       "read_more": "อ่านเพิ่มเติม",
       "read_more_title": "อ่านเพิ่มเติม: {{ title }}",
       "back_to_blog": "กลับไปยัง {{ title }}",
-      "tags": "แท็ก"
+      "tags": "แท็ก",
+      "article_with_count": {
+        "one": "1 บทความ",
+        "other": "{{ count }} บทความ",
+        "zero": "0 บทความ"
+      }
     },
     "comments": {
       "title": "แสดงความคิดเห็น",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">ค่าจัดส่ง<\/a>ที่คิดคำนวณในระหว่างขั้นตอนการชำระเงิน",
       "unit_price_label": "ราคาต่อหน่วย",
       "view_cart": "ดูตะกร้าสินค้า",
-      "availability": "ความพร้อมในการเผยแพร่"
+      "availability": "ความพร้อมในการเผยแพร่",
+      "from_lowest_price": "จาก {{ lowest_price }}",
+      "view_in_space": "ดูในพื้นที่ของคุณ",
+      "view_in_space_label": "ดูในพื้นที่ของคุณ โหลดรายการในหน้าต่างการสร้างวัตถุเสมือน"
     }
   },
   "gift_cards": {

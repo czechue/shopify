@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "Por favor, tente um termo de pesquisa diferente ou volte para a <a href=\"{{ link }}\">página inicial<\/a>.",
       "empty_search_message": "O campo de pesquisa não pode estar vazio",
-      "results_with_count": {
-        "one": "{{ count }} resultado para \"{{ terms }}\"",
-        "other": "{{ count }} resultados para \"{{ terms }}\""
-      },
       "title": "Pesquise no nosso site",
       "placeholder": "Pesquisar",
       "submit": "Enviar",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "Resultado da pesquisa",
         "other": "Procurar Resultados"
+      },
+      "search_for": "Pesquisar",
+      "loading": "Carregando",
+      "clear_search_term": "Limpar termo de pesquisa",
+      "number_of_results": "{{ result_number }} de {{ results_count }}",
+      "products": "Produtos",
+      "number_of_results_found": "{{ results_count }} resultados encontrados",
+      "one_result_found": "1 resultado encontrado",
+      "no_results": "Tente verificar a ortografia ou usar palavras diferentes.",
+      "results_with_count": {
+        "one": "{{ count }} resultado para “{{ terms }}”",
+        "other": "{{ count }} resultados para “{{ terms }}”"
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "Moeda"
+    },
+    "language": {
+      "dropdown_label": "Idioma"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "Produto em destaque",
-      "gallery_thumbnail_alt": "Carregar imagem no visualizador da galeria, {{ imageAlt }}"
+      "gallery_thumbnail_alt": "Carregar imagem no visualizador da galeria, {{ imageAlt }}",
+      "video_thumbnail_alt": "Carregar e reproduzir vídeo no visualizador da galeria, {{ imageAlt }}",
+      "model_thumbnail_alt": "Carregar modelo 3D no visualizador da galeria, {{ imageAlt }}"
     },
     "map": {
       "address_error": "Não é possível localizar o endereço",
@@ -119,7 +131,12 @@
       "read_more": "Saiba mais",
       "read_more_title": "Saiba mais: {{ title }}",
       "back_to_blog": "Voltar para {{ title }}",
-      "tags": "Tag"
+      "tags": "Tag",
+      "article_with_count": {
+        "one": "1 artigo",
+        "other": "{{ count }} artigos",
+        "zero": "0 artigo"
+      }
     },
     "comments": {
       "title": "Deixe um comentário",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Frete<\/a> calculado no checkout.",
       "unit_price_label": "Preço unitário",
       "view_cart": "Visualizar carrinho",
-      "availability": "Disponibilidade"
+      "availability": "Disponibilidade",
+      "from_lowest_price": "de {{ lowest_price }}",
+      "view_in_space": "Ver no seu espaço",
+      "view_in_space_label": "Ver em seu espaço, carregar item na janela de realidade aumentada"
     }
   },
   "gift_cards": {

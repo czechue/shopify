@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "Spróbuj użyć innego szukanego słowa lub wróć do <a href=\"{{ link }}\">strony głównej<\/a>.",
       "empty_search_message": "Pole wyszukiwania nie może być puste",
-      "results_with_count": {
-        "one": "{{ count }} wynik dla \"{{ terms }}\"",
-        "other": "{{ count }} wyniki(-ów) dla \"{{ terms }}\""
-      },
       "title": "Przeszukaj naszą stronę",
       "placeholder": "Szukaj",
       "submit": "Zatwierdź",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "Wynik wyszukiwania",
         "other": "Wyniki wyszukiwania"
+      },
+      "search_for": "Szukaj",
+      "loading": "Ładowanie",
+      "clear_search_term": "Wyczyść szukany termin",
+      "number_of_results": "{{ result_number }} z {{ results_count }}",
+      "products": "Produkty",
+      "number_of_results_found": "Liczba znalezionych wyników: {{ results_count }}",
+      "one_result_found": "Znaleziono 1 wynik",
+      "no_results": "Spróbuj sprawdzić pisownię lub użyj innych słów.",
+      "results_with_count": {
+        "one": "{{ count }} wynik dla \"{{ terms }}\"",
+        "other": "{{ count }} wyniki(-ów) dla \"{{ terms }}\""
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "Waluta"
+    },
+    "language": {
+      "dropdown_label": "Język"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "Polecany produkt",
-      "gallery_thumbnail_alt": "Załaduj obraz do przeglądarki galerii, {{ imageAlt }}"
+      "gallery_thumbnail_alt": "Załaduj obraz do przeglądarki galerii, {{ imageAlt }}",
+      "video_thumbnail_alt": "Załaduj i odtwarzaj film w przeglądarce Gallery, {{ imageAlt }}",
+      "model_thumbnail_alt": "Załaduj model 3D do przeglądarki Gallery {{ imageAlt }}"
     },
     "map": {
       "address_error": "Błąd podczas wyszukiwania tego adresu",
@@ -119,7 +131,12 @@
       "read_more": "Dowiedz się więcej",
       "read_more_title": "Czytaj więcej: {{ title }}",
       "back_to_blog": "Powrót do {{ title }}",
-      "tags": "Tagi"
+      "tags": "Tagi",
+      "article_with_count": {
+        "one": "1 artykuł",
+        "other": "{{ count }} artykuły(-ów)",
+        "zero": "0 artykułów"
+      }
     },
     "comments": {
       "title": "Zostaw komentarz",
@@ -361,7 +378,7 @@
       "on_sale": "Sprzedaż",
       "sale_price": "Cena sprzedaży",
       "quantity": "Ilość",
-      "add_to_cart": "Zamów teraz",
+      "add_to_cart": "Dodaj do koszyka",
       "loader_label": "Dodawanie produktu do koszyka",
       "back_to_collection": "Powrót do {{ title }}",
       "vendor": "Dostawca",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Koszt wysyłki<\/a> obliczony przy kasie.",
       "unit_price_label": "Cena jednostkowa",
       "view_cart": "Zobacz koszyk",
-      "availability": "Dostępność"
+      "availability": "Dostępność",
+      "from_lowest_price": "z {{ lowest_price }}",
+      "view_in_space": "Zobacz w swojej przestrzeni",
+      "view_in_space_label": "Widok w Twojej przestrzeni, wczytuje przedmiot do okna rzeczywistości rozszerzonej"
     }
   },
   "gift_cards": {

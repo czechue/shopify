@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "Prøv et andet søgeord eller gå tilbage til <a href=\"{{ link }}\">startsiden<\/a>.",
       "empty_search_message": "Søgefeltet kan ikke være tomt",
-      "results_with_count": {
-        "one": "{{ count }} resultat for \"{{ terms }}\"",
-        "other": "{{ count }} resultater for \"{{ terms }}\""
-      },
       "title": "Søg på vores website",
       "placeholder": "Søg",
       "submit": "Indsend",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "Søgeresultat",
         "other": "Søgeresultater"
+      },
+      "search_for": "Søg efter",
+      "loading": "Indlæser",
+      "clear_search_term": "Ryd søgeord",
+      "number_of_results": "{{ result_number }} ud af {{ results_count }}",
+      "products": "Produkter",
+      "number_of_results_found": "{{ results_count }} resultater blev fundet",
+      "one_result_found": "1 resultat blev fundet",
+      "no_results": "Kontrollér stavemåden, eller prøv andre ord.",
+      "results_with_count": {
+        "one": "{{ count }} resultat for \"{{ terms }}\"",
+        "other": "{{ count }} resultater for \"{{ terms }}\""
       }
     },
     "newsletter_form": {
@@ -80,20 +87,25 @@
     },
     "currency": {
       "dropdown_label": "Valuta"
+    },
+    "language": {
+      "dropdown_label": "Sprog"
     }
   },
   "sections": {
     "slideshow": {
       "next_slide": "Næste billede",
       "previous_slide": "Forrige billede",
-      "pause_slideshow": "Sæt slideshow på pause",
-      "rotate_slideshow": "Afspil slideshow",
+      "pause_slideshow": "Sæt diasshow på pause",
+      "rotate_slideshow": "Afspil diasshow",
       "load_slide": "Indlæs dias {{ slide_number }}",
       "navigation_instructions": "Brug venstre\/højre pile til at navigere i diasshowet eller stryg til venstre\/højre, hvis du bruger en mobilenhed"
     },
     "featured_product": {
       "title": "Fremhævet produkt",
-      "gallery_thumbnail_alt": "Indlæs billede til gallerivisning {{ imageAlt }}"
+      "gallery_thumbnail_alt": "Indlæs billede til gallerivisning {{ imageAlt }}",
+      "video_thumbnail_alt": "Indlæs og afspil video i gallerivisning {{ imageAlt }}",
+      "model_thumbnail_alt": "Indlæs 3D-model til gallerivisning {{ imageAlt }}"
     },
     "map": {
       "address_error": "Der opstod en fejl under forsøg på at finde adressen",
@@ -119,7 +131,12 @@
       "read_more": "Læs mere",
       "read_more_title": "Læs mere: {{ title }}",
       "back_to_blog": "Tilbage til {{ title }}",
-      "tags": "Tags"
+      "tags": "Tags",
+      "article_with_count": {
+        "one": "1 artikel",
+        "other": "{{ count }} artikler",
+        "zero": "0 artikler"
+      }
     },
     "comments": {
       "title": "Indsend en kommentar",
@@ -289,7 +306,7 @@
       "total": "I alt",
       "fulfilled_at_html": "Behandlet den {{ date }}",
       "subtotal": "Subtotal",
-      "track_shipment": "Følg levering"
+      "track_shipment": "Følg forsendelse"
     },
     "recover_password": {
       "title": "Forny din adgangskode",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Levering<\/a> beregnes ved betaling.",
       "unit_price_label": "Pris pr. stk.",
       "view_cart": "Se indkøbskurv",
-      "availability": "Tilgængelige"
+      "availability": "Tilgængelige",
+      "from_lowest_price": "fra {{ lowest_price }}",
+      "view_in_space": "Se den i dit område",
+      "view_in_space_label": "Se den i dine omgivelser – indlæser vare i et augmented reality-vindue"
     }
   },
   "gift_cards": {

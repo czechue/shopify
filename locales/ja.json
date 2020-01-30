@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "別の検索用語を試してみるか、<a href=\"{{ link }}\">ホームページ<\/a>に戻ってください。",
       "empty_search_message": "検索フィールドを空にすることはできません",
-      "results_with_count": {
-        "one": "\"{{ terms }}\"の検索結果{{ count }}件",
-        "other": "\"{{ terms }}\"の検索結果{{ count }}件"
-      },
       "title": "サイトを検索する",
       "placeholder": "検索する",
       "submit": "送信",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "検索結果",
         "other": "の検索結果"
+      },
+      "search_for": "検索する",
+      "loading": "読み込んでいます",
+      "clear_search_term": "検索語をクリアする",
+      "number_of_results": "{{ result_number }}\/{{ results_count }}",
+      "products": "商品",
+      "number_of_results_found": "{{ results_count }}件の結果が見つかりました",
+      "one_result_found": "1件の結果が見つかりました",
+      "no_results": "スペルを確認するか、別の単語を試してください。",
+      "results_with_count": {
+        "one": "{{ count }}件 - 結果 ”{{ terms }}”",
+        "other": "{{ count }}件 - 結果 ”{{ terms }}”"
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "通貨"
+    },
+    "language": {
+      "dropdown_label": "言語"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "おすすめ商品",
-      "gallery_thumbnail_alt": "画像をギャラリービューアに読み込む, {{ imageAlt }}"
+      "gallery_thumbnail_alt": "画像をギャラリービューアに読み込む, {{ imageAlt }}",
+      "video_thumbnail_alt": "ギャラリービューア{{ imageAlt }}に読み込んでビデオを見る",
+      "model_thumbnail_alt": "3Dモデルをギャラリービューア{{ imageAlt }}に読み込む"
     },
     "map": {
       "address_error": "住所を調べる際にエラーが発生しました",
@@ -119,7 +131,12 @@
       "read_more": "続きを読む",
       "read_more_title": "続きを読む: {{ title }}",
       "back_to_blog": "{{ title }}に戻る",
-      "tags": "タグ"
+      "tags": "タグ",
+      "article_with_count": {
+        "one": "記事1件",
+        "other": "記事{{ count }}件",
+        "zero": "記事0件"
+      }
     },
     "comments": {
       "title": "コメントを残す",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">配送料<\/a>は購入手続き時に計算されます。",
       "unit_price_label": "単価",
       "view_cart": "カートを見る",
-      "availability": "公開状況"
+      "availability": "公開状況",
+      "from_lowest_price": "{{ lowest_price }}から",
+      "view_in_space": "スペースに表示する",
+      "view_in_space_label": "スペースに表示し、拡張現実ウィンドウにアイテムを読み込む"
     }
   },
   "gift_cards": {

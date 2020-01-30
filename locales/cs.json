@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "Vyzkoušejte jiný hledaný termín, nebo se vraťte na <a href=\"{{ link }}\">domovskou stránku<\/a>.",
       "empty_search_message": "Pole hledání nemůže být prázdné",
-      "results_with_count": {
-        "one": "{{ count }} výsledek pro „{{ terms }}“",
-        "other": "{{ count }} výsledků pro „{{ terms }}“"
-      },
       "title": "Hledat na našem webu",
       "placeholder": "Hledat",
       "submit": "Odeslat",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "Výsledek hledání",
         "other": "Výsledky hledání"
+      },
+      "search_for": "Vyhledat:",
+      "loading": "Načítání",
+      "clear_search_term": "Vymazat hledaný termín",
+      "number_of_results": "{{ result_number }}\/{{ results_count }}",
+      "products": "Produkty",
+      "number_of_results_found": "Počet nalezených výsledků: {{ results_count }}",
+      "one_result_found": "Počet nalezených výsledků: 1",
+      "no_results": "Zkuste zkontrolovat pravopis nebo použít jiná slova.",
+      "results_with_count": {
+        "one": "{{ count }} výsledek pro hledání {{ terms }}",
+        "other": "Počet výsledků pro hledání {{ terms }}: {{ count }}"
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "Měna"
+    },
+    "language": {
+      "dropdown_label": "Jazyk"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "Propagovaný produkt",
-      "gallery_thumbnail_alt": "Načíst obrázek do prohlížeče Galerie, {{ imageAlt }}"
+      "gallery_thumbnail_alt": "Načíst obrázek do prohlížeče Galerie, {{ imageAlt }}",
+      "video_thumbnail_alt": "Načíst a přehrát video v prohlížeči Galerie, {{ imageAlt }}",
+      "model_thumbnail_alt": "Načíst 3D model do prohlížeče Galerie, {{ imageAlt }}"
     },
     "map": {
       "address_error": "Chyba při hledání této adresy",
@@ -119,7 +131,12 @@
       "read_more": "Číst dál",
       "read_more_title": "Přečíst více: {{ title }}",
       "back_to_blog": "Zpět do {{ title }}",
-      "tags": "Štítky"
+      "tags": "Štítky",
+      "article_with_count": {
+        "one": "1 článek",
+        "other": "Počet článků: {{ count }}",
+        "zero": "0 článků"
+      }
     },
     "comments": {
       "title": "Zanechat komentář",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Poštovné<\/a> se vypočítá v pokladně.",
       "unit_price_label": "Jednotková cena",
       "view_cart": "Zobrazit košík",
-      "availability": "Dostupnost"
+      "availability": "Dostupnost",
+      "from_lowest_price": "z: {{ lowest_price }}",
+      "view_in_space": "Zobrazit ve vašem prostoru",
+      "view_in_space_label": "Zobrazení ve vašem prostoru: Načte položku v okně rozšířené reality"
     }
   },
   "gift_cards": {

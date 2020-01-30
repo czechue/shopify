@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "Veuillez essayer un terme de recherche différent ou revenir à la <a href=\"{{ link }}\">page d'accueil<\/a>.",
       "empty_search_message": "Le champ de recherche ne peut pas être vide",
-      "results_with_count": {
-        "one": "{{ count }} résultat pour \"{{ terms }}\"",
-        "other": "{{ count }} résultats pour \"{{ terms }}\""
-      },
       "title": "Effectuer une recherche",
       "placeholder": "Rechercher",
       "submit": "Soumettre",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "Résultat de la recherche",
         "other": "Résultats de la recherche"
+      },
+      "search_for": "Rechercher",
+      "loading": "Chargement",
+      "clear_search_term": "Effacer le terme de recherche",
+      "number_of_results": "{{ result_number }} sur {{ results_count }}",
+      "products": "Produits",
+      "number_of_results_found": "{{ results_count }} résultats trouvés",
+      "one_result_found": "1 résultat trouvé",
+      "no_results": "Essayez de vérifier votre orthographe ou d'utiliser des mots différents.",
+      "results_with_count": {
+        "one": "{{ count }} résultat pour « {{ terms }} »",
+        "other": "{{ count }} résultats pour « {{ terms }} »"
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "Devise"
+    },
+    "language": {
+      "dropdown_label": "Langue"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "Produit en vedette",
-      "gallery_thumbnail_alt": "Charger l'image dans la galerie, {{ imageAlt }}"
+      "gallery_thumbnail_alt": "Charger l'image dans la galerie, {{ imageAlt }}",
+      "video_thumbnail_alt": "Charger et lire la vidéo dans la visionneuse de la Galerie, {{ imageAlt }}",
+      "model_thumbnail_alt": "Charger le modèle 3D dans la Galerie, {{ imageAlt }}"
     },
     "map": {
       "address_error": "Une erreur s'est produite dans la recherche de cette adresse",
@@ -119,7 +131,12 @@
       "read_more": "En savoir plus",
       "read_more_title": "En savoir plus sur : {{ title }}",
       "back_to_blog": "Retour à {{ title }}",
-      "tags": "Balises"
+      "tags": "Balises",
+      "article_with_count": {
+        "one": "1 article",
+        "other": "{{ count }} articles",
+        "zero": "0 articles"
+      }
     },
     "comments": {
       "title": "Laisser un commentaire",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Frais d'expédition<\/a> calculés lors du passage à la caisse.",
       "unit_price_label": "Prix unitaire",
       "view_cart": "Voir le panier",
-      "availability": "Disponibilité"
+      "availability": "Disponibilité",
+      "from_lowest_price": "de {{ lowest_price }}",
+      "view_in_space": "Afficher dans votre espace",
+      "view_in_space_label": "Affichage dans votre espace, charge l'article dans une fenêtre de réalité augmentée"
     }
   },
   "gift_cards": {
