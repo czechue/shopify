@@ -156,9 +156,9 @@
   },
   "cart": {
     "general": {
-      "title": "Twój koszyk",
+      "title": "Twoja lista życzeń",
       "note": "Dodaj notatkę do swojego zamówienia",
-      "removed_item_html": "Usunięto <span class=\"cart__removed-product-details\">{{ quantity }}<\/span>({{ quantity }}) z Twojego koszyka.",
+      "removed_item_html": "Usunięto <span class=\"cart__removed-product-details\">{{ quantity }}<\/span> Talent z Twojej listy życzeń.",
       "remove": "Usuń",
       "subtotal": "Suma częściowa",
       "savings": "Oszczędzasz",
@@ -168,17 +168,17 @@
       "taxes_included_and_shipping_policy_html": "Z wliczonym podatkiem. <a href=\"{{ link }}\">Koszt wysyłki<\/a> obliczony przy kasie.",
       "update": "Aktualizuj",
       "checkout": "Realizacja zakupu",
-      "empty": "Twój koszyk jest obecnie pusty.",
-      "cookies_required": "Włącz pliki cookie, aby korzystać z koszyka",
-      "continue_shopping": "Kontynuuj zakupy",
-      "cart_error": "Wystąpił błąd podczas aktualizowania Twojego koszyka. Spróbuj ponownie."
+      "empty": "Twój lista życzeń jest obecnie pusta.",
+      "cookies_required": "Włącz pliki cookie, aby korzystać z listy życzeń",
+      "continue_shopping": "Szukaj dalej",
+      "cart_error": "Wystąpił błąd podczas aktualizowania Twojej listy życzeń. Spróbuj ponownie."
     },
     "label": {
       "discounted_total": "Łączny rabat",
-      "product": "Produkt",
+      "product": "Talent",
       "price": "Cena",
       "price_column": "Szczegółowe informacje na temat rabatu można znaleźć w kolumnie Cena.",
-      "product_details": "Szczegóły produktu",
+      "product_details": "Szczegóły Talentu",
       "quantity": "Ilość",
       "qty": "Ilość",
       "regular_total": "Suma regularna",
@@ -187,12 +187,12 @@
       "update": "Aktualizuj"
     },
     "popup": {
-      "added_to_cart": "Dodano już do Twojego koszyka",
+      "added_to_cart": "Dodano już do Twojej listy życzeń",
       "cart_count": {
         "one": "{{ count }} pozycja",
         "other": "{{ count }} pozycji(-e)"
       },
-      "product_details": "Szczegóły produktu",
+      "product_details": "Opis Talentu",
       "quantity": "Ilość",
       "quantity_label": "Ilość: {{ quantity_count }}"
     }
