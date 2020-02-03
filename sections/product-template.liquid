@@ -1,3 +1,5 @@
+{{ "https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" | script_tag }}
+
 <div class="product-template__container page-width"
   id="ProductSection-{{ section.id }}"
   data-section-id="{{ section.id }}"
@@ -138,7 +140,7 @@
               {%- endif -%}
             </div>
           {%- endif -%}
-          
+
           <div class="tags__wrapper">
             {% for tag in product.tags %}
               <div class="tags__item">
@@ -228,9 +230,18 @@
                     {% include 'icon-spinner' %}
                   </span>
                 </button>
-                {% if section.settings.enable_payment_button %}
-                  {{ form | payment_button }}
-                {% endif %}
+
+                <button class="btn product-form__cart-submit" type="button" id="BookTalentButton" name="book">
+                  Bookuj Vidle
+                </button>
+
+                {%- comment -%}
+                  Todo: Payment Button - do przeniesienia na warstwę
+                  {% if section.settings.enable_payment_button %}
+                    {{ form | payment_button }}
+                  {% endif %}
+                {%- endcomment -%}
+
               </div>
             </div>
           {% endform %}
@@ -274,7 +285,138 @@
   </script>
 {% endunless %}
 
+<script id="modal-container" type="text/html">
+  <div class="modal modal--is-active" role="dialog" aria-modal="true" aria-labelledby="password-modal-heading">
+    <div class="modal__inner next-steps__content">
+      <button type="button" class="modal__close js-modal-close text-link">
+        {% include 'icon-close' %}
+        <span class="icon__fallback-text">{{ 'general.accessibility.close_modal' | t | json }}</span>
+      </button>
+      <div class="modal__centered password-modal__content page-width">
+        <h5>Zamów świeżutką Vidle od {{ product.title }}</h5>
+          <p class="line-item-property__field" data-video-for>
+            <label>To video będzie:</label>
+            <input type="radio" class="required" name="properties-radio" value="SOMEONE"> <span>dla kogoś</span><br>
+            <input type="radio" class="required" name="properties-radio" value="ME" checked> <span>dla mnie</span><br>
+            <input type="radio" class="required" name="properties-radio" value="COMMERCIAL"> <span>na potrzeby komercyjne</span><br>
+          </p>
+          <div data-role="for-someone-form" class="line-item-property__field flex">
+            <div class="width-half padding-r-input">
+              <label for="for-someone--for">Dla:</label>
+              <input id="for-someone--for" type="text" name="properties-for-someone--for" class="width-fluid">
+            </div>
+            <div class="width-half padding-r-input">
+              <label for="for-someone--from">Od:</label>
+              <input id="for-someone--from" type="text" name="properties-for-someone--from" class="width-fluid">
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</script>
 
+<script>
+  const customTags = [ '<%', '%>' ];
+  const VIDEO_FOR = {
+    ME: 'ME',
+    SOMEONE: 'SOMEONE',
+    COMMERCIAL: 'COMMERCIAL'
+  };
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const body = document.querySelector(".template-product");
+    const bookTalentBtn = document.querySelector("#BookTalentButton");
+    const modalContainer =  document.querySelector("#modal-container");
+    const modalTemplate = modalContainer.innerHTML;
+
+
+    let videoFor = VIDEO_FOR.ME;
+
+    function renderModal() {
+      const output = Mustache.render(modalTemplate, { videoFor }, {}, customTags);
+      body.insertAdjacentHTML('afterbegin', output);
+    }
+
+    function addModalCloseBtnEventListener() {
+      const modalCloseBtn = document.querySelector(".js-modal-close");
+      const modalDomElement = document.querySelector('[role="dialog"]');
+
+      modalCloseBtn.addEventListener('click', () => {
+        modalDomElement.parentNode.removeChild(modalDomElement)
+      })
+    }
+
+    function handleShowModal() {
+      body.classList.add("relative");
+    }
+
+    function showCorrectVideoForForm(form) {
+
+    }
+
+    function addVideoForEventListener() {
+      const parentElement = document.querySelector('[data-video-for]');
+      const radios = parentElement.querySelectorAll('input');
+
+      radios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          videoFor = VIDEO_FOR[e.target.value];
+          showCorrectVideoForForm(form)
+        })
+      })
+    }
+
+    bookTalentBtn.addEventListener('click', () => {
+      handleShowModal();
+      renderModal();
+      addModalCloseBtnEventListener();
+      addVideoForEventListener();
+    })
+
+
+
+  })
+</script>
+
+<style>
+  .modal--is-active {
+    z-index: 12;
+    background-color: rgba(0,0,0, 0.6);
+    display: flex;
+    justify-content: center;
+  }
+
+  .next-steps__content {
+    align-self: center;
+    background-color: white;
+    width: 700px;
+    height: 500px;
+  }
+
+  .modal__close {
+    padding: 25px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  .width-fluid {
+    width: 100%;
+  }
+
+  .width-half {
+    width: 50%;
+  }
+
+  .padding-r-input {
+    padding-right: 16px;
+  }
+</style>
 
 {% schema %}
 {
