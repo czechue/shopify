@@ -1,4 +1,5 @@
 {{ "https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" | script_tag }}
+{{ "http://sdks.shopifycdn.com/js-buy-sdk/v2/latest/index.umd.min.js" | script_tag }}
 
 <div class="product-template__container page-width"
   id="ProductSection-{{ section.id }}"
@@ -292,30 +293,79 @@
         {% include 'icon-close' %}
         <span class="icon__fallback-text">{{ 'general.accessibility.close_modal' | t | json }}</span>
       </button>
-      <div class="modal__centered password-modal__content page-width">
-        <h5>Zamów świeżutką Vidle od {{ product.title }}</h5>
+      <div class="modal-content page-width">
+        <h4>Zamów świeżutką Vidle od {{ product.title }}</h4>
           <p class="line-item-property__field" data-video-for>
             <label>To video będzie:</label>
             <input type="radio" class="required" name="properties-radio" value="SOMEONE"> <span>dla kogoś</span><br>
             <input type="radio" class="required" name="properties-radio" value="ME" checked> <span>dla mnie</span><br>
-            <input type="radio" class="required" name="properties-radio" value="COMMERCIAL"> <span>na potrzeby komercyjne</span><br>
           </p>
-          <div data-role="for-someone-form" class="line-item-property__field flex">
+          <div data-form data-role="for-someone-form" class="flex hidden">
             <div class="width-half padding-r-input">
-              <label for="for-someone--for">Dla:</label>
-              <input id="for-someone--for" type="text" name="properties-for-someone--for" class="width-fluid">
+              <p class="line-item-property__field">
+                <label for="for-someone--for">Dla:</label>
+                <input id="for-someone--for" type="text" name="properties-for-someone--for" class="width-fluid">
+              </p>
             </div>
             <div class="width-half padding-r-input">
-              <label for="for-someone--from">Od:</label>
-              <input id="for-someone--from" type="text" name="properties-for-someone--from" class="width-fluid">
+              <p class="line-item-property__field">
+                <label for="for-someone--from">Od:</label>
+                <input id="for-someone--from" type="text" name="properties-for-someone--from" class="width-fluid">
+              </p>
             </div>
           </div>
+          <div data-form data-role="for-me-form">
+            <p class="line-item-property__field">
+              <label for="properties-for-me">Moje imię to:</label>
+              <input id="properties-for-me" type="text" name="properties-for-me">
+            </p>
+          </div>
+          <br>
+
+          <p class="line-item-property__field">
+            <label>Wybierz okazję</label>
+            <select id="wybierz-okazje" name="properties[_Wybierz okazję]">
+              <option value="wybierz">wybierz okazję</option>
+              <option value="urodziny">urodziny</option>
+              <option value="imieniny">imieniny</option>
+              <option value="walentynki">walentynki</option>
+              <option value="dzień Matki">dzień Matki</option>
+              <option value="gratulacje">gratulacje</option>
+              <option value="roast">roast</option>
+              <option value="ślub">ślub</option>
+              <option value="rocznica">rocznica</option>
+              <option value="inna">inna</option>
+            </select>
+          </p>
+
+        <p class="line-item-property__field">
+          <label for="moje-wskazowki">Moje wskazówki / instrukcje dla {{ product.title }}</label>
+          <textarea class="textarea" id="moje-wskazowki" name="properties-moje-wskazowki"></textarea>
+        </p>
+
+        <p class="line-item-property__field">
+          <label for="properties-link">Dodaj link (opcjonalne)</label>
+          <input class="width-fluid" placeholder="https://ulubione-zdjecie/img1.jpg" id="properties-link" type="text" name="properties-link">
+        </p>
+
+        <p class="line-item-property__field">
+          <input type="hidden" name="properties-publication" value="No">
+          <input id="publication" type="checkbox" name="properties-publication" value="Yes">
+          <label for="publication">Nie pozwalaj na publikację tego video na vidla.pl</label>
+        </p>
+
+        <button class="btn product-form__cart-submit" type="button" id="properties-submit" name="book">
+          Bookuj za {{ product.price | money  }}
+        </button>
+
       </div>
     </div>
   </div>
 </script>
 
 <script>
+  const variantId = '{{ product.id }}';
+
   const customTags = [ '<%', '%>' ];
   const VIDEO_FOR = {
     ME: 'ME',
@@ -350,8 +400,19 @@
       body.classList.add("relative");
     }
 
-    function showCorrectVideoForForm(form) {
+    function hideAllVideoForForms() {
+      const forms = document.querySelectorAll('[data-form]');
+      forms.forEach(form => form.classList.add('hidden'));
+    }
 
+    function showCorrectVideoForForm(videoFor) {
+      hideAllVideoForForms();
+      if (videoFor === VIDEO_FOR.SOMEONE) {
+        document.querySelector('[data-role="for-someone-form"]').classList.remove('hidden');
+      }
+      if (videoFor === VIDEO_FOR.ME) {
+        document.querySelector('[data-role="for-me-form"]').classList.remove('hidden');
+      }
     }
 
     function addVideoForEventListener() {
@@ -361,8 +422,26 @@
       radios.forEach(radio => {
         radio.addEventListener('change', (e) => {
           videoFor = VIDEO_FOR[e.target.value];
-          showCorrectVideoForForm(form)
+          showCorrectVideoForForm(videoFor)
         })
+      })
+    }
+
+    function addSubmitFormEventListener() {
+      const btn = document.querySelector("#properties-submit");
+
+      btn.addEventListener('click', () => {
+        const client = ShopifyBuy.buildClient({
+          domain: 'videoup1.myshopify.com',
+          storefrontAccessToken: "df927c242fdb7923b05aecde71305f15"
+        });
+        client.checkout.create().then((checkout) => {
+          // Do something with the checkout
+          console.log(checkout);
+
+          // window.location.assign(checkout.webUrl)
+        });
+
       })
     }
 
@@ -371,9 +450,8 @@
       renderModal();
       addModalCloseBtnEventListener();
       addVideoForEventListener();
+      addSubmitFormEventListener();
     })
-
-
 
   })
 </script>
@@ -390,19 +468,23 @@
     align-self: center;
     background-color: white;
     width: 700px;
-    height: 500px;
+    min-height: 500px;
   }
 
   .modal__close {
     padding: 25px;
   }
 
-  .hidden {
-    display: none;
+  .modal-content {
+    margin-top: 80px;
   }
 
   .flex {
     display: flex;
+  }
+
+  .hidden {
+    display: none !important;
   }
 
   .width-fluid {
@@ -415,6 +497,11 @@
 
   .padding-r-input {
     padding-right: 16px;
+  }
+
+  .textarea {
+    max-height: 100px;
+    width: 100%;
   }
 </style>
 
