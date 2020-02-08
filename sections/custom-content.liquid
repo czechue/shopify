@@ -6,17 +6,22 @@
   {% endif %}
 
   <div class="custom-content">
+    {%- assign block_width_mobile = '' -%}
+
     {% for block in section.blocks %}
       {% case block.settings.width %}
         {% when '25%' %}
           {%- assign max_height = 250 -%}
-          {%- assign block_width = 'small--one-half medium-up--one-quarter' -%}
+          {%- assign block_width = 'medium-up--one-quarter' -%}
+          {%- assign block_width_mobile = 'small--one-half' -%}
         {% when '33%' %}
           {%- assign max_height = 345 -%}
-          {%- assign block_width = 'small--one-half medium-up--one-third' -%}
+          {%- assign block_width = 'medium-up--one-third' -%}
+          {%- assign block_width_mobile = 'small--one-half' -%}
         {% when '50%' %}
           {%- assign max_height = 530 -%}
-          {%- assign block_width = 'small--one-half medium-up--one-half' -%}
+          {%- assign block_width = 'medium-up--one-half' -%}
+          {%- assign block_width_mobile = 'small--one-half' -%}
         {% when '66%' %}
           {%- assign max_height = 720 -%}
           {%- assign block_width = 'two-thirds' -%}
@@ -28,6 +33,10 @@
           {%- assign block_width = 'one-whole' -%}
       {% endcase %}
 
+      {%- if block.type == 'blog' or block.type == 'article' -%}
+        {%- assign block_width_mobile = 'small--one-whole' -%}
+      {%- endif -%}
+
       {% if block.type == 'image' %}
         {% capture img_id %}CustomImage--{{ forloop.index }}-{{ block.settings.image.id }}{% endcapture %}
         {% capture img_wrapper_id %}CustomImageWrapper--{{ forloop.index }}-{{ block.settings.image.id }}{% endcapture %}
@@ -37,7 +46,7 @@
         {% endunless %}
       {% endif %}
 
-      <div class="custom__item custom__item--{{ block.type }} custom__item--{{ block.id }} {{ block_width }} {% if block.settings.alignment %} align--{{ block.settings.alignment }} {% endif %}" {{ block.shopify_attributes }}>
+      <div class="custom__item custom__item--{{ block.type }} custom__item--{{ block.id }} {{ block_width_mobile }} {{ block_width }}{% if block.settings.alignment %} align--{{ block.settings.alignment }}{% endif %}" {{ block.shopify_attributes }}>
         <div class="custom__item-inner custom__item-inner--{{ block.type }}"{% if block.type == 'image' %} id="{{ img_wrapper_id }}"{% endif %}>
           {% case block.type %}
             {% when 'image' %}
@@ -121,6 +130,189 @@
                   </li>
                 {%- endfor -%}
               </ul>
+
+            {%- when 'blog' -%}
+              {%- assign blog = blogs[block.settings.blog] -%}
+                <div class="blog-card">
+                  {%- if block.settings.cover_image -%}
+                    {%- assign img = block.settings.cover_image -%}
+                    {%- capture img_id -%}ArticleImage-{{ img.id }}{%- endcapture -%}
+                    {%- capture img_wrapper_id -%}ArticleImageWrapper-{{ img.id }}{%- endcapture -%}
+                    {%- assign img_url = img | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+                    {% include 'image-style', image: img, height: 600, wrapper_id: img_wrapper_id, img_id: img_id %}
+
+                    <div class="blog-card__image-wrapper blog-card__image-wrapper--{{ block.settings.image_size }}">
+                      <a href="{{ blog.url | default: '#' }}" class="blog-card__link">
+                        <div class="blog-card__overlay box ratio-container js lazyload" data-bgset="{% include 'bgset', image: img %}" data-sizes="auto" data-parent-fit="cover" style="background-image: url('{{ img | img_url: '300x300' }}')"></div>
+                        <noscript>
+                          <div class="blog-card__overlay" style="background-image: url('{{ img | img_url: '1024x1024' }}')"></div>
+                        </noscript>
+
+                        <div class="blog-card__title-wrapper">
+                          <div class="blog-card__title h3">{{ blog.title }}</div>
+                        </div>
+                      </a>
+                    </div>
+                  {%- else -%}
+                    <div class="blog-card__image-wrapper blog-card__image-wrapper--{{ block.settings.image_size }}">
+                      <a href="{{ blog.url | default: '#' }}" class="blog-card__link">
+                        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                      </a>
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.description != blank -%}
+                    <div class="blog-card__excerpt rte">{{ block.settings.description }}</div>
+                  {%- endif -%}
+
+                  {%- if block.settings.show_number_articles -%}
+                    {%- assign number_of_articles = blog.articles_count | default: 0 -%}
+                    <a href="{{ blog.url | default: '#' }}" class="blog-card__comment-count btn btn--tertiary btn--small" aria-label="{{ 'blogs.article.article_with_count' | t: count: number_of_articles }}: {{ blog.title }}">{{ 'blogs.article.article_with_count' | t: count: number_of_articles }}</a>
+                  {%- endif -%}
+                </div>
+            {%- when 'article' -%}
+              {%- assign article = articles[block.settings.article] -%}
+              {%- assign cover_image = block.settings.cover_image -%}
+
+              {%- if article != empty -%}
+                <div id="Article-{{ article.image.id }}" class="article">
+                  <a href="{{ article.url }}" class="article__link article__link--fixed-overlay">
+                    {%- if article.image and cover_image != 'none' -%}
+                      {%- capture img_id -%}ArticleImage-{{ article.image.id }}{%- endcapture -%}
+                      {%- capture img_wrapper_id -%}ArticleImageWrapper-{{ article.image.id }}{%- endcapture -%}
+                      {%- assign img_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+                      {% render 'image-style', image: article.image, height: 600, wrapper_id: img_wrapper_id, img_id: img_id %}
+
+                      {%- style -%}
+                        #Article-{{ article.image.id }} .article__link:not([disabled]):hover .article__grid-image-wrapper::before,
+                        #Article-{{ article.image.id }} .article__link:focus .article__grid-image-wrapper::before {
+                          padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100 }}%;
+                        }
+                      {%- endstyle -%}
+
+                      <div id="{{ img_wrapper_id }}" class="article__grid-image-wrapper article__grid-image-wrapper--{{ cover_image }} article-image-wrapper js">
+                        <div class="article__grid-image-container" style="padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100 }}%;">
+                          <img id="{{ img_id }}"
+                              class="article__list-image lazyload"
+                              src="{{ article.image | img_url: '300x300' }}"
+                              data-src="{{ img_url }}"
+                              data-widths="[180, 360, 540, 720, 905, 1090, 1296, 1512, 1728, 2048]"
+                              data-aspectratio="{{ article.image.aspect_ratio }}"
+                              data-sizes="auto"
+                              alt="">
+                        </div>
+                      </div>
+
+                      <noscript>
+                        <p>
+                          <a href="{{ article.url }}">
+                            {{ article | img_url: '455x300', scale: 2 | img_tag: article.title }}
+                          </a>
+                        </p>
+                      </noscript>
+                    {%- endif -%}
+
+                    <h2 class="article__title h3">{{ article.title }}</h2>
+                  </a>
+
+                  {%- if block.settings.show_author or block.settings.show_date -%}
+                    <div class="article__meta">
+                      {%- if block.settings.show_author -%}
+                        <span class="article__author">{{ 'blogs.article.by_author' | t: author: article.author }}</span>
+                      {%- endif -%}
+
+                      {%- if block.settings.show_date -%}
+                        <span class="article__date">
+                          {{ article.published_at | time_tag: format: 'date' }}
+                        </span>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+                  <div class="rte rte--article">
+                    {%- if article.excerpt.size > 0 -%}
+                      {{ article.excerpt }}
+                    {%- else -%}
+                      {{ article.content | strip_html | truncate: 150 }}
+                    {%- endif -%}
+                  </div>
+
+                  {%- if article.tags.size > 0 -%}
+                    <div class="article__tags rte">
+                      <ul class="list--inline" aria-label="{{ 'blogs.article.tags' | t }}">
+                        {%- for tag in article.tags -%}
+                          <li>
+                            <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="article__grid-tag">{{ tag }}</a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+
+                  <ul class="list--inline article__meta-buttons">
+                    <li>
+                      <a href="{{ article.url }}" class="btn btn--tertiary btn--small" aria-label="{{ 'blogs.article.read_more_title' | t: title: article.title }}">
+                        {{ 'blogs.article.read_more' | t }}
+                      </a>
+                    </li>
+
+                    {%- if article.comments != blank and article.comments_count > 0 -%}
+                      <li>
+                        <a href="{{ article.url }}#comments" class="article__comment-count btn btn--tertiary btn--small">
+                          {{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}
+                        </a>
+                      </li>
+                    {%- endif -%}
+                  </ul>
+                </div>
+              {%- else -%}
+                <div class="article">
+                  <a href="#" class="article__link article__link--fixed-overlay">
+                    {%- if article.image and cover_image != 'none' -%}
+                      <div class="article__grid-image-wrapper article__grid-image-wrapper--{{ cover_image }} article-image-wrapper">
+                        <div class="article__grid-image-container">
+                          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                        </div>
+                      </div>
+                    {%- endif -%}
+
+                    <h2 class="article__title h3">{{ 'homepage.onboarding.blog_title' | t }}</h2>
+                  </a>
+
+                  {%- if block.settings.show_author or block.settings.show_date -%}
+                    <div class="article__meta">
+                      {%- if block.settings.show_author -%}
+                        {%- assign author_name = 'homepage.onboarding.blog_author' | t -%}
+                        <span class="article__author">{{ 'blogs.article.by_author' | t: author: author_name }}</span>
+                      {%- endif -%}
+
+                      {%- if block.settings.show_date -%}
+                        <span class="article__date">
+                          {{ "now" | time_tag: format: 'date' }}
+                        </span>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+                  <div class="rte rte--article">{{ 'homepage.onboarding.blog_excerpt' | t }}</div>
+
+                  <ul class="list--inline article__meta-buttons">
+                    <li>
+                      <a href="#" class="btn btn--tertiary btn--small">
+                        {{ 'blogs.article.read_more' | t }}
+                      </a>
+                    </li>
+
+                    <li>
+                      <a href="#" class="article__comment-count btn btn--tertiary btn--small">
+                        {{ 'blogs.comments.comments_with_count' | t: count: 1 }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              {%- endif -%}
           {% endcase %}
         </div>
       </div>
@@ -2647,6 +2839,1001 @@
               }
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "blog",
+      "name": {
+        "da": "Blog",
+        "de": "Blog",
+        "en": "Blog",
+        "es": "Blog",
+        "fi": "Blogi",
+        "fr": "Blog",
+        "hi": "ब्लॉग",
+        "it": "Blog",
+        "ja": "ブログ",
+        "ko": "블로그",
+        "ms": "Blog",
+        "nb": "Blogg",
+        "nl": "Blog",
+        "pt-BR": "Blog",
+        "pt-PT": "Blogue",
+        "sv": "Blogg",
+        "th": "บล็อก",
+        "zh-CN": "博客",
+        "zh-TW": "部落格"
+      },
+      "settings": [
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": {
+            "da": "Blog",
+            "de": "Blog",
+            "en": "Blog",
+            "es": "Blog",
+            "fi": "Blogi",
+            "fr": "Blog",
+            "hi": "ब्लॉग",
+            "it": "Blog",
+            "ja": "ブログ",
+            "ko": "블로그",
+            "ms": "Blog",
+            "nb": "Blogg",
+            "nl": "Blog",
+            "pt-BR": "Blog",
+            "pt-PT": "Blogue",
+            "sv": "Blogg",
+            "th": "บล็อก",
+            "zh-CN": "博客",
+            "zh-TW": "部落格"
+          }
+        },
+        {
+          "type": "image_picker",
+          "id": "cover_image",
+          "label": {
+            "da": "Coverbillede",
+            "de": "Titelbild",
+            "en": "Cover image",
+            "es": "Imagen de portada",
+            "fi": "Kansikuva",
+            "fr": "Image de couverture",
+            "hi": "कवर इमेज",
+            "it": "Immagine di copertina",
+            "ja": "表紙画像",
+            "ko": "커버 이미지",
+            "ms": "Kulit imej",
+            "nb": "Forsidebilde",
+            "nl": "Coverafbeelding",
+            "pt-BR": "Imagem de capa",
+            "pt-PT": "Imagem de capa",
+            "sv": "Omslagsbild",
+            "th": "รูปภาพหน้าปก",
+            "zh-CN": "封面图片",
+            "zh-TW": "封面圖片"
+          }
+        },
+        {
+          "type": "select",
+          "id": "image_size",
+          "label": {
+            "da": "Billedets størrelse",
+            "de": "Foto-Größe",
+            "en": "Image size",
+            "es": "Tamaño de la imagen",
+            "fi": "Kuvan koko",
+            "fr": "Taille des images",
+            "hi": "इमेज का आकार",
+            "it": "Dimensione immagine",
+            "ja": "画像サイズ",
+            "ko": "이미지 크기",
+            "ms": "Saiz imej",
+            "nb": "Bildestørrelse",
+            "nl": "Afbeeldingsformaat",
+            "pt-BR": "Tamanho da imagem",
+            "pt-PT": "Tamanho da imagem",
+            "sv": "Bildstorlek",
+            "th": "ขนาดรูปภาพ",
+            "zh-CN": "图片尺寸",
+            "zh-TW": "圖片尺寸"
+          },
+          "default": "medium",
+          "options": [
+            {
+              "value": "small",
+              "label": {
+                "da": "Lille",
+                "de": "Klein",
+                "en": "Small",
+                "es": "Pequeño",
+                "fi": "Pieni",
+                "fr": "Petit",
+                "hi": "छोटा",
+                "it": "Piccolo",
+                "ja": "スモール",
+                "ko": "스몰",
+                "ms": "Kecil",
+                "nb": "Liten",
+                "nl": "Klein",
+                "pt-BR": "Pequeno",
+                "pt-PT": "Pequeno",
+                "sv": "Liten",
+                "th": "เล็ก",
+                "zh-CN": "小",
+                "zh-TW": "小型"
+              }
+            },
+            {
+              "value": "medium",
+              "label": {
+                "da": "Medium",
+                "de": "Mittel",
+                "en": "Medium",
+                "es": "Mediano",
+                "fi": "Keskisuuri",
+                "fr": "Moyenne",
+                "hi": "मध्यम",
+                "it": "Medio",
+                "ja": "中",
+                "ko": "보통",
+                "ms": "Sederhana",
+                "nb": "Middels",
+                "nl": "Gemiddeld",
+                "pt-BR": "Médio",
+                "pt-PT": "Médio",
+                "sv": "Medium",
+                "th": "ปานกลาง",
+                "zh-CN": "中等",
+                "zh-TW": "中等"
+              }
+            },
+            {
+              "value": "large",
+              "label": {
+                "da": "Stor",
+                "de": "Groß",
+                "en": "Large",
+                "es": "Grande",
+                "fi": "Suuri",
+                "fr": "Grande",
+                "hi": "बड़ा",
+                "it": "Grande",
+                "ja": "大",
+                "ko": "라지",
+                "ms": "Besar",
+                "nb": "Stor",
+                "nl": "Groot",
+                "pt-BR": "Grande",
+                "pt-PT": "Grande",
+                "sv": "Stor",
+                "th": "ใหญ่",
+                "zh-CN": "大",
+                "zh-TW": "大型"
+              }
+            }
+          ]
+        },
+        {
+          "id": "description",
+          "type": "richtext",
+          "default": {
+            "da": "<p>Beskrivelse af din blog.</p>",
+            "de": "<p>Beschreibung Ihres Blogs.</p>",
+            "en": "<p>Description of your blog.</p>",
+            "es": "<p>Descripción de tu blog.</p>",
+            "fi": "<p> Blogisi kuvaus. </p>",
+            "fr": "<p>Description de votre blog.</p>",
+            "hi": "<p>अपने ब्लॉग का वर्णन करें.</p>",
+            "it": "<p>Descrizione del blog.</p>",
+            "ja": "<p>ブログの説明。</p>",
+            "ko": "<p>블로그 설명.</p>",
+            "ms": "<p>Penerangan blog anda.</p>",
+            "nb": "<p>Beskrivelse av bloggen din.</p>",
+            "nl": "<p>Beschrijving van uw blog.</p>",
+            "pt-BR": "<p>Descrição do seu blog. </p>",
+            "pt-PT": "<p>Descrição do seu blog.</p>",
+            "sv": "<p>Beskrivning av din blogg.</p>",
+            "th": "<p>คำอธิบายบล็อกของคุณ</p>",
+            "zh-CN": "<p>您博客的描述。</p>",
+            "zh-TW": "<p>您部落格的描述。</p>"
+          },
+          "label": {
+            "da": "Beskrivelse",
+            "de": "Beschreibung",
+            "en": "Description",
+            "es": "Descripción",
+            "fi": "Kuvaus",
+            "fr": "Description",
+            "hi": "विवरण",
+            "it": "Descrizione",
+            "ja": "説明",
+            "ko": "설명",
+            "ms": "Penerangan",
+            "nb": "Beskrivelse",
+            "nl": "Beschrijving",
+            "pt-BR": "Descrição",
+            "pt-PT": "Descrição",
+            "sv": "Beskrivning",
+            "th": "คำอธิบาย",
+            "zh-CN": "描述",
+            "zh-TW": "說明"
+          }
+        },
+        {
+          "id": "show_number_articles",
+          "type": "checkbox",
+          "default": true,
+          "label": {
+            "da": "Vis antallet af artikler",
+            "de": "Anzahl der Artikel anzeigen",
+            "en": "Show number of articles",
+            "es": "Mostrar la cantidad de artículos",
+            "fi": "Näytä artikkeleiden määrä",
+            "fr": "Afficher le nombre d'articles",
+            "hi": "लेखों की संख्या दिखाएं",
+            "it": "Mostra numero di articoli",
+            "ja": "記事数を表示する",
+            "ko": "문서의 수 표시",
+            "ms": "Tunjukkan bilangan artikel",
+            "nb": "Vis antall artikler",
+            "nl": "Aantal artikelen weergeven",
+            "pt-BR": "Mostrar o número de artigos",
+            "pt-PT": "Mostrar o número de artigos",
+            "sv": "Visa antal artiklar",
+            "th": "แสดงจำนวนบทความ",
+            "zh-CN": "显示文章数",
+            "zh-TW": "顯示文章數量"
+          }
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": {
+            "da": "Containerbredde",
+            "de": "Breite des Elements",
+            "en": "Container width",
+            "es": "Ancho del contenedor",
+            "fi": "Säiliön leveys",
+            "fr": "Largeur du conteneur",
+            "hi": "कंटेनर की चौड़ाई",
+            "it": "Larghezza contenitore",
+            "ja": "コンテナーの幅",
+            "ko": "컨테이너 폭",
+            "ms": "Lebar bekas",
+            "nb": "Beholderbredde",
+            "nl": "Containerbreedte",
+            "pt-BR": "Largura do recipiente",
+            "pt-PT": "Largura do recipiente",
+            "sv": "Container-bredd",
+            "th": "ความกว้างของความจุ",
+            "zh-CN": "容器宽度",
+            "zh-TW": "容器寬度"
+          },
+          "default": "25%",
+          "options": [
+            {
+              "value": "25%",
+              "label": {
+                "da": "25 %",
+                "de": "25%",
+                "en": "25%",
+                "es": "25%",
+                "fi": "25 %",
+                "fr": "25 %",
+                "hi": "25%",
+                "it": "25%",
+                "ja": "25%",
+                "ko": "25%",
+                "ms": "25%",
+                "nb": "25 %",
+                "nl": "25%",
+                "pt-BR": "25%",
+                "pt-PT": "25%",
+                "sv": "25 %",
+                "th": "25%",
+                "zh-CN": "25％",
+                "zh-TW": "25%"
+              }
+            },
+            {
+              "value": "33%",
+              "label": {
+                "da": "33 %",
+                "de": "33%",
+                "en": "33%",
+                "es": "33%",
+                "fi": "33 %",
+                "fr": "33 %",
+                "hi": "33%",
+                "it": "33%",
+                "ja": "33%",
+                "ko": "33%",
+                "ms": "33%",
+                "nb": "33 %",
+                "nl": "33%",
+                "pt-BR": "33%",
+                "pt-PT": "33%",
+                "sv": "33 %",
+                "th": "33%",
+                "zh-CN": "33%",
+                "zh-TW": "33%"
+              }
+            },
+            {
+              "value": "50%",
+              "label": {
+                "da": "50 %",
+                "de": "50%",
+                "en": "50%",
+                "es": "50%",
+                "fi": "50 %",
+                "fr": "50 %",
+                "hi": "50%",
+                "it": "50%",
+                "ja": "50%",
+                "ko": "50%",
+                "ms": "50%",
+                "nb": "50 %",
+                "nl": "50%",
+                "pt-BR": "50%",
+                "pt-PT": "50%",
+                "sv": "50 %",
+                "th": "50%",
+                "zh-CN": "50%",
+                "zh-TW": "50%"
+              }
+            },
+            {
+              "value": "66%",
+              "label": {
+                "da": "66 %",
+                "de": "66%",
+                "en": "66%",
+                "es": "66%",
+                "fi": "66 %",
+                "fr": "66 %",
+                "hi": "66%",
+                "it": "66%",
+                "ja": "66%",
+                "ko": "66%",
+                "ms": "66%",
+                "nb": "66 %",
+                "nl": "66%",
+                "pt-BR": "66%",
+                "pt-PT": "66%",
+                "sv": "66 %",
+                "th": "66%",
+                "zh-CN": "66%",
+                "zh-TW": "66%"
+              }
+            },
+            {
+              "value": "75%",
+              "label": {
+                "da": "75 %",
+                "de": "75%",
+                "en": "75%",
+                "es": "75%",
+                "fi": "75 %",
+                "fr": "75 %",
+                "hi": "75%",
+                "it": "75%",
+                "ja": "75%",
+                "ko": "75%",
+                "ms": "75%",
+                "nb": "75 %",
+                "nl": "75%",
+                "pt-BR": "75%",
+                "pt-PT": "75%",
+                "sv": "75 %",
+                "th": "75%",
+                "zh-CN": "75%",
+                "zh-TW": "75%"
+              }
+            },
+            {
+              "value": "100%",
+              "label": {
+                "da": "100 %",
+                "de": "100%",
+                "en": "100%",
+                "es": "100%",
+                "fi": "100 %",
+                "fr": "100 %",
+                "hi": "100%",
+                "it": "100%",
+                "ja": "100%",
+                "ko": "100%",
+                "ms": "100%",
+                "nb": "100 %",
+                "nl": "100%",
+                "pt-BR": "100%",
+                "pt-PT": "100%",
+                "sv": "100 %",
+                "th": "100%",
+                "zh-CN": "100%",
+                "zh-TW": "100%"
+              }
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": {
+            "da": "Lodret justering",
+            "de": "Vertikale Ausrichtung",
+            "en": "Vertical alignment",
+            "es": "Alineación vertical",
+            "fi": "Pystysuuntainen tasaus",
+            "fr": "Alignement vertical",
+            "hi": "लंबवत पंक्तिबद्धता",
+            "it": "Allineamento verticale",
+            "ja": "垂直アラインメント",
+            "ko": "수직 정렬",
+            "ms": "Penjajaran menegak",
+            "nb": "Vertikal justering",
+            "nl": "Verticaal uitlijnen",
+            "pt-BR": "Alinhamento vertical",
+            "pt-PT": "Alinhamento vertical",
+            "sv": "Vertikal justering",
+            "th": "การจัดวางแนวตั้ง",
+            "zh-CN": "垂直对齐",
+            "zh-TW": "垂直對齊"
+          },
+          "default": "center",
+          "options": [
+            {
+              "value": "top-middle",
+              "label": {
+                "da": "Top",
+                "de": "Oben",
+                "en": "Top",
+                "es": "Superior",
+                "fi": "Ylös",
+                "fr": "Haut",
+                "hi": "सबसे ऊपर",
+                "it": "Alto",
+                "ja": "上",
+                "ko": "위쪽",
+                "ms": "Atas",
+                "nb": "Topp",
+                "nl": "Boven",
+                "pt-BR": "Acima",
+                "pt-PT": "Acima",
+                "sv": "Högst upp",
+                "th": "ด้านบน",
+                "zh-CN": "顶部",
+                "zh-TW": "頂部"
+              }
+            },
+            {
+              "value": "center",
+              "label": {
+                "da": "I midten",
+                "de": "Mitte",
+                "en": "Middle",
+                "es": "Centrada",
+                "fi": "Keskelle",
+                "fr": "Milieu",
+                "hi": "मध्य में",
+                "it": "Centrale",
+                "ja": "中央",
+                "ko": "중간",
+                "ms": "Tengah",
+                "nb": "Midten",
+                "nl": "Midden",
+                "pt-BR": "Meio",
+                "pt-PT": "Meio",
+                "sv": "Mitten",
+                "th": "ตรงกลาง",
+                "zh-CN": "中间",
+                "zh-TW": "中央"
+              }
+            },
+            {
+              "value": "bottom-middle",
+              "label": {
+                "da": "Bund",
+                "de": "Unten",
+                "en": "Bottom",
+                "es": "Inferior",
+                "fi": "Alas",
+                "fr": "Bas",
+                "hi": "नीचे का",
+                "it": "Basso",
+                "ja": "下",
+                "ko": "아래쪽",
+                "ms": "Bawah",
+                "nb": "Bunn",
+                "nl": "Onder",
+                "pt-BR": "Abaixo",
+                "pt-PT": "Abaixo",
+                "sv": "Längst ner",
+                "th": "ด้านล่าง",
+                "zh-CN": "底部",
+                "zh-TW": "底部"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "article",
+      "name": {
+        "da": "Artikel",
+        "de": "Artikel",
+        "en": "Article",
+        "es": "Artículo",
+        "fi": "Artikkeli",
+        "fr": "Article",
+        "hi": "लेख",
+        "it": "Articolo",
+        "ja": "記事",
+        "ko": "문서",
+        "ms": "Artikel",
+        "nb": "Artikkel",
+        "nl": "Artikel",
+        "pt-BR": "Artigo",
+        "pt-PT": "Artigo",
+        "sv": "Artikel",
+        "th": "บทความ",
+        "zh-CN": "文章",
+        "zh-TW": "文章"
+      },
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": {
+            "da": "Artikel",
+            "de": "Artikel",
+            "en": "Article",
+            "es": "Artículo",
+            "fi": "Artikkeli",
+            "fr": "Article",
+            "hi": "लेख",
+            "it": "Articolo",
+            "ja": "記事",
+            "ko": "문서",
+            "ms": "Artikel",
+            "nb": "Artikkel",
+            "nl": "Artikel",
+            "pt-BR": "Artigo",
+            "pt-PT": "Artigo",
+            "sv": "Artikel",
+            "th": "บทความ",
+            "zh-CN": "文章",
+            "zh-TW": "文章"
+          }
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": {
+            "da": "Containerbredde",
+            "de": "Breite des Elements",
+            "en": "Container width",
+            "es": "Ancho del contenedor",
+            "fi": "Säiliön leveys",
+            "fr": "Largeur du conteneur",
+            "hi": "कंटेनर की चौड़ाई",
+            "it": "Larghezza contenitore",
+            "ja": "コンテナーの幅",
+            "ko": "컨테이너 폭",
+            "ms": "Lebar bekas",
+            "nb": "Beholderbredde",
+            "nl": "Containerbreedte",
+            "pt-BR": "Largura do recipiente",
+            "pt-PT": "Largura do recipiente",
+            "sv": "Container-bredd",
+            "th": "ความกว้างของความจุ",
+            "zh-CN": "容器宽度",
+            "zh-TW": "容器寬度"
+          },
+          "default": "50%",
+          "options": [
+            {
+              "value": "25%",
+              "label": {
+                "da": "25 %",
+                "de": "25%",
+                "en": "25%",
+                "es": "25%",
+                "fi": "25 %",
+                "fr": "25 %",
+                "hi": "25%",
+                "it": "25%",
+                "ja": "25%",
+                "ko": "25%",
+                "ms": "25%",
+                "nb": "25 %",
+                "nl": "25%",
+                "pt-BR": "25%",
+                "pt-PT": "25%",
+                "sv": "25 %",
+                "th": "25%",
+                "zh-CN": "25％",
+                "zh-TW": "25%"
+              }
+            },
+            {
+              "value": "33%",
+              "label": {
+                "da": "33 %",
+                "de": "33%",
+                "en": "33%",
+                "es": "33%",
+                "fi": "33 %",
+                "fr": "33 %",
+                "hi": "33%",
+                "it": "33%",
+                "ja": "33%",
+                "ko": "33%",
+                "ms": "33%",
+                "nb": "33 %",
+                "nl": "33%",
+                "pt-BR": "33%",
+                "pt-PT": "33%",
+                "sv": "33 %",
+                "th": "33%",
+                "zh-CN": "33%",
+                "zh-TW": "33%"
+              }
+            },
+            {
+              "value": "50%",
+              "label": {
+                "da": "50 %",
+                "de": "50%",
+                "en": "50%",
+                "es": "50%",
+                "fi": "50 %",
+                "fr": "50 %",
+                "hi": "50%",
+                "it": "50%",
+                "ja": "50%",
+                "ko": "50%",
+                "ms": "50%",
+                "nb": "50 %",
+                "nl": "50%",
+                "pt-BR": "50%",
+                "pt-PT": "50%",
+                "sv": "50 %",
+                "th": "50%",
+                "zh-CN": "50%",
+                "zh-TW": "50%"
+              }
+            },
+            {
+              "value": "66%",
+              "label": {
+                "da": "66 %",
+                "de": "66%",
+                "en": "66%",
+                "es": "66%",
+                "fi": "66 %",
+                "fr": "66 %",
+                "hi": "66%",
+                "it": "66%",
+                "ja": "66%",
+                "ko": "66%",
+                "ms": "66%",
+                "nb": "66 %",
+                "nl": "66%",
+                "pt-BR": "66%",
+                "pt-PT": "66%",
+                "sv": "66 %",
+                "th": "66%",
+                "zh-CN": "66%",
+                "zh-TW": "66%"
+              }
+            },
+            {
+              "value": "75%",
+              "label": {
+                "da": "75 %",
+                "de": "75%",
+                "en": "75%",
+                "es": "75%",
+                "fi": "75 %",
+                "fr": "75 %",
+                "hi": "75%",
+                "it": "75%",
+                "ja": "75%",
+                "ko": "75%",
+                "ms": "75%",
+                "nb": "75 %",
+                "nl": "75%",
+                "pt-BR": "75%",
+                "pt-PT": "75%",
+                "sv": "75 %",
+                "th": "75%",
+                "zh-CN": "75%",
+                "zh-TW": "75%"
+              }
+            },
+            {
+              "value": "100%",
+              "label": {
+                "da": "100 %",
+                "de": "100%",
+                "en": "100%",
+                "es": "100%",
+                "fi": "100 %",
+                "fr": "100 %",
+                "hi": "100%",
+                "it": "100%",
+                "ja": "100%",
+                "ko": "100%",
+                "ms": "100%",
+                "nb": "100 %",
+                "nl": "100%",
+                "pt-BR": "100%",
+                "pt-PT": "100%",
+                "sv": "100 %",
+                "th": "100%",
+                "zh-CN": "100%",
+                "zh-TW": "100%"
+              }
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": {
+            "da": "Lodret justering",
+            "de": "Vertikale Ausrichtung",
+            "en": "Vertical alignment",
+            "es": "Alineación vertical",
+            "fi": "Pystysuuntainen tasaus",
+            "fr": "Alignement vertical",
+            "hi": "लंबवत पंक्तिबद्धता",
+            "it": "Allineamento verticale",
+            "ja": "垂直アラインメント",
+            "ko": "수직 정렬",
+            "ms": "Penjajaran menegak",
+            "nb": "Vertikal justering",
+            "nl": "Verticaal uitlijnen",
+            "pt-BR": "Alinhamento vertical",
+            "pt-PT": "Alinhamento vertical",
+            "sv": "Vertikal justering",
+            "th": "การจัดวางแนวตั้ง",
+            "zh-CN": "垂直对齐",
+            "zh-TW": "垂直對齊"
+          },
+          "default": "center",
+          "options": [
+            {
+              "value": "top-middle",
+              "label": {
+                "da": "Top",
+                "de": "Oben",
+                "en": "Top",
+                "es": "Superior",
+                "fi": "Ylös",
+                "fr": "Haut",
+                "hi": "सबसे ऊपर",
+                "it": "Alto",
+                "ja": "上",
+                "ko": "위쪽",
+                "ms": "Atas",
+                "nb": "Topp",
+                "nl": "Boven",
+                "pt-BR": "Acima",
+                "pt-PT": "Acima",
+                "sv": "Högst upp",
+                "th": "ด้านบน",
+                "zh-CN": "顶部",
+                "zh-TW": "頂部"
+              }
+            },
+            {
+              "value": "center",
+              "label": {
+                "da": "I midten",
+                "de": "Mitte",
+                "en": "Middle",
+                "es": "Centrada",
+                "fi": "Keskelle",
+                "fr": "Milieu",
+                "hi": "मध्य में",
+                "it": "Centrale",
+                "ja": "中央",
+                "ko": "중간",
+                "ms": "Tengah",
+                "nb": "Midten",
+                "nl": "Midden",
+                "pt-BR": "Meio",
+                "pt-PT": "Meio",
+                "sv": "Mitten",
+                "th": "ตรงกลาง",
+                "zh-CN": "中间",
+                "zh-TW": "中央"
+              }
+            },
+            {
+              "value": "bottom-middle",
+              "label": {
+                "da": "Bund",
+                "de": "Unten",
+                "en": "Bottom",
+                "es": "Inferior",
+                "fi": "Alas",
+                "fr": "Bas",
+                "hi": "नीचे का",
+                "it": "Basso",
+                "ja": "下",
+                "ko": "아래쪽",
+                "ms": "Bawah",
+                "nb": "Bunn",
+                "nl": "Onder",
+                "pt-BR": "Abaixo",
+                "pt-PT": "Abaixo",
+                "sv": "Längst ner",
+                "th": "ด้านล่าง",
+                "zh-CN": "底部",
+                "zh-TW": "底部"
+              }
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "cover_image",
+          "label": {
+            "da": "Coverbillede",
+            "de": "Titelbild",
+            "en": "Cover image",
+            "es": "Imagen de portada",
+            "fi": "Kansikuva",
+            "fr": "Image de couverture",
+            "hi": "कवर इमेज",
+            "it": "Immagine di copertina",
+            "ja": "表紙画像",
+            "ko": "커버 이미지",
+            "ms": "Kulit imej",
+            "nb": "Forsidebilde",
+            "nl": "Coverafbeelding",
+            "pt-BR": "Imagem de capa",
+            "pt-PT": "Imagem de capa",
+            "sv": "Omslagsbild",
+            "th": "รูปภาพหน้าปก",
+            "zh-CN": "封面图片",
+            "zh-TW": "封面圖片"
+          },
+          "default": "large",
+          "options": [
+            {
+              "value": "small",
+              "label": {
+                "da": "Lille",
+                "de": "Klein",
+                "en": "Small",
+                "es": "Pequeño",
+                "fi": "Pieni",
+                "fr": "Petit",
+                "hi": "छोटा",
+                "it": "Piccolo",
+                "ja": "スモール",
+                "ko": "스몰",
+                "ms": "Kecil",
+                "nb": "Liten",
+                "nl": "Klein",
+                "pt-BR": "Pequeno",
+                "pt-PT": "Pequeno",
+                "sv": "Liten",
+                "th": "เล็ก",
+                "zh-CN": "小",
+                "zh-TW": "小型"
+              }
+            },
+            {
+              "value": "large",
+              "label": {
+                "da": "Stor",
+                "de": "Groß",
+                "en": "Large",
+                "es": "Grande",
+                "fi": "Suuri",
+                "fr": "Grande",
+                "hi": "बड़ा",
+                "it": "Grande",
+                "ja": "大",
+                "ko": "라지",
+                "ms": "Besar",
+                "nb": "Stor",
+                "nl": "Groot",
+                "pt-BR": "Grande",
+                "pt-PT": "Grande",
+                "sv": "Stor",
+                "th": "ใหญ่",
+                "zh-CN": "大",
+                "zh-TW": "大型"
+              }
+            },
+            {
+              "value": "none",
+              "label": {
+                "da": "Ingen",
+                "de": "Keine",
+                "en": "None",
+                "es": "Ninguno",
+                "fi": "Ei mitään",
+                "fr": "Aucun",
+                "hi": "कोई नहीं",
+                "it": "Nessuno",
+                "ja": "なし",
+                "ko": "없음",
+                "ms": "Tiada",
+                "nb": "Ingen",
+                "nl": "Geen",
+                "pt-BR": "Nenhum",
+                "pt-PT": "Nenhum",
+                "sv": "Inga",
+                "th": "ไม่มี",
+                "zh-CN": "无",
+                "zh-TW": "無"
+              }
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "show_author",
+          "label": {
+            "da": "Vis forfatter",
+            "de": "Autor anzeigen",
+            "en": "Show author",
+            "es": "Mostrar autor",
+            "fi": "Näytä tekijä",
+            "fr": "Afficher l'auteur",
+            "hi": "लेखक दिखाएं",
+            "it": "Mostra autore",
+            "ja": "執筆者を表示する",
+            "ko": "작성자 표시",
+            "ms": "Tunjukkan pengarang",
+            "nb": "Vis forfatter",
+            "nl": "Auteur weergeven",
+            "pt-BR": "Exibir autor",
+            "pt-PT": "Mostrar autor",
+            "sv": "Visa författare",
+            "th": "แสดงผู้เขียน",
+            "zh-CN": "显示作者",
+            "zh-TW": "顯示作者"
+          },
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_date",
+          "label": {
+            "da": "Vis dato",
+            "de": "Datum anzeigen",
+            "en": "Show date",
+            "es": "Mostrar fecha",
+            "fi": "Näytä päivämäärä",
+            "fr": "Afficher la date",
+            "hi": "दिनांक दिखाएं",
+            "it": "Mostra data",
+            "ja": "日付を表示する",
+            "ko": "날짜 표시",
+            "ms": "Tunjukkan tarikh",
+            "nb": "Vis dato",
+            "nl": "Datum weergeven",
+            "pt-BR": "Exibir data",
+            "pt-PT": "Mostrar data",
+            "sv": "Visa datum",
+            "th": "แสดงวันที่",
+            "zh-CN": "显示日期",
+            "zh-TW": "顯示日期"
+          },
+          "default": true
         }
       ]
     },

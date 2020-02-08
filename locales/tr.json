@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "Lütfen farklı bir arama terimi deneyin veya <a href=\"{{ link }}\">ana sayfaya<\/a> geri dönün.",
       "empty_search_message": "Arama alanı boş olamaz",
-      "results_with_count": {
-        "one": "\"{{ terms }}\" için {{ count }} sonuç",
-        "other": "\"{{ terms }}\" için {{ count }} sonuç"
-      },
       "title": "Sitemizde arayın",
       "placeholder": "Ara",
       "submit": "Gönder",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "Arama sonucu",
         "other": "Arama sonuçları"
+      },
+      "search_for": "Şunun için ara:",
+      "loading": "Yükleniyor",
+      "clear_search_term": "Arama terimini temizle",
+      "number_of_results": "{{ result_number }}\/{{ results_count }}",
+      "products": "Ürünler",
+      "number_of_results_found": "{{ results_count }} sonuç bulundu",
+      "one_result_found": "1 sonuç bulundu",
+      "no_results": "Yazımınızı kontrol etmeyi veya farklı kelimeler kullanmayı deneyin.",
+      "results_with_count": {
+        "one": "\"{{ terms }}\" için {{ count }} sonuç",
+        "other": "\"{{ terms }}\" için {{ count }} sonuç"
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "Para birimi"
+    },
+    "language": {
+      "dropdown_label": "Dil"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "Öne çıkan ürün",
-      "gallery_thumbnail_alt": "Görseli Galeri görüntüleyiciye yükleyin, {{ imageAlt }}"
+      "gallery_thumbnail_alt": "Görseli Galeri görüntüleyiciye yükleyin, {{ imageAlt }}",
+      "video_thumbnail_alt": "Videoyu Galeri görüntüleyiciye yükleyin ve burada izleyin, {{ imageAlt }}",
+      "model_thumbnail_alt": "3B modeli Galeri görüntüleyiciye yükleyin, {{ imageAlt }}"
     },
     "map": {
       "address_error": "Bu adres aranırken hata oluştu",
@@ -119,7 +131,12 @@
       "read_more": "Devamını okuyun",
       "read_more_title": "Devamını okuyun: {{ title }}",
       "back_to_blog": "Geri dön: {{ title }}",
-      "tags": "Etiketler"
+      "tags": "Etiketler",
+      "article_with_count": {
+        "one": "1 makale",
+        "other": "{{ count }} makale",
+        "zero": "0 makale"
+      }
     },
     "comments": {
       "title": "Yorum yapın",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Kargo<\/a>, ödeme sayfasında hesaplanır.",
       "unit_price_label": "Birim fiyatı",
       "view_cart": "Sepeti görüntüle",
-      "availability": "Stok durumu"
+      "availability": "Stok durumu",
+      "from_lowest_price": "{{ lowest_price }} yayınından",
+      "view_in_space": "Kendi alanınızda görüntüleyin",
+      "view_in_space_label": "Alanınızda görüntüleyin; ürün artırılmış gerçeklik penceresinde yüklenir"
     }
   },
   "gift_cards": {

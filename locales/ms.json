@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "Sila cuba terma carian yang berbeza atau kembali ke <a href=\"{{ link }}\">halaman utama<\/a>.",
       "empty_search_message": "Medan carian tidak boleh kosong",
-      "results_with_count": {
-        "one": "{{ count }} menghasilkan \"{{ terms }}\"",
-        "other": "{{ count }} keputusan untuk \"{{ terms }}\""
-      },
       "title": "Cari laman web kami",
       "placeholder": "Carian",
       "submit": "Kemukakan",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "Hasil carian",
         "other": "Hasil carian"
+      },
+      "search_for": "Cari untuk",
+      "loading": "Memuatkan",
+      "clear_search_term": "Kosongkan istilah carian",
+      "number_of_results": "{{ result_number }} daripada {{ results_count }}",
+      "products": "Produk",
+      "number_of_results_found": "{{ results_count }} hasil dijumpai",
+      "one_result_found": "1 hasil dijumpai",
+      "no_results": "Cuba semak ejaan anda atau gunakan perkataan yang berbeza.",
+      "results_with_count": {
+        "one": "{{ count }} hasil untuk \"{{ terms }}\"",
+        "other": "{{ count }} hasil untuk \"{{ terms }}\""
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "Mata wang"
+    },
+    "language": {
+      "dropdown_label": "Bahasa"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "Produk yang ditampilkan",
-      "gallery_thumbnail_alt": "Muatkan imej ke dalam penonton Galeri, {{ imageAlt }}"
+      "gallery_thumbnail_alt": "Muatkan imej ke dalam penonton Galeri, {{ imageAlt }}",
+      "video_thumbnail_alt": "Muatkan dan mainkan video dalam penonton Galeri, {{ imageAlt }}",
+      "model_thumbnail_alt": "Muatkan model 3D ke dalam penonton Galeri, {{ imageAlt }}"
     },
     "map": {
       "address_error": "Ralat mencari alamat itu",
@@ -119,7 +131,12 @@
       "read_more": "Baca lebih lanjut",
       "read_more_title": "Baca lebih lanjut: {{ title }}",
       "back_to_blog": "Kembali kepada {{ title }}",
-      "tags": "Tag"
+      "tags": "Tag",
+      "article_with_count": {
+        "one": "1 artikel",
+        "other": "{{ count }} artikel",
+        "zero": "0 artikel"
+      }
     },
     "comments": {
       "title": "Tinggalkan komen",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Penghantaran<\/a> dikira semasa daftar keluar.",
       "unit_price_label": "Harga seunit",
       "view_cart": "Lihat troli",
-      "availability": "Ketersediaan"
+      "availability": "Ketersediaan",
+      "from_lowest_price": "daripada {{ lowest_price }}",
+      "view_in_space": "Lihat di dalam ruang anda",
+      "view_in_space_label": "Lihat di ruang anda, memuatkan item di dalam tetingkap realiti terimbuh"
     }
   },
   "gift_cards": {

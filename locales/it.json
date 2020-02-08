@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "Prova un termine di ricerca diverso o torna alla <a href=\"{{ link }}\">homepage<\/a>.",
       "empty_search_message": "Il campo di ricerca non può essere vuoto",
-      "results_with_count": {
-        "one": "{{ count }} risultato per \"{{ terms }}\"",
-        "other": "{{ count }} risultati per \"{{ terms }}\""
-      },
       "title": "Cerca nel nostro sito",
       "placeholder": "Cerca",
       "submit": "Invia",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "Risultato della ricerca",
         "other": "Risultati della ricerca"
+      },
+      "search_for": "Cerca",
+      "loading": "Caricamento",
+      "clear_search_term": "Cancella termine ricerca",
+      "number_of_results": "{{ result_number }} di {{ results_count }}",
+      "products": "Prodotti",
+      "number_of_results_found": "{{ results_count }} risultati trovati",
+      "one_result_found": "1 risultato trovato",
+      "no_results": "Controlla l'ortografia o prova una parola diversa.",
+      "results_with_count": {
+        "one": "{{ count }} risultato per “{{ terms }}”",
+        "other": "{{ count }} risultati per “{{ terms }}”"
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "Valuta"
+    },
+    "language": {
+      "dropdown_label": "Lingua"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "Prodotto presentato",
-      "gallery_thumbnail_alt": "Carica l'immagine nel visualizzatore di Gallery, {{ imageAlt }}"
+      "gallery_thumbnail_alt": "Carica l'immagine nel visualizzatore di Gallery, {{ imageAlt }}",
+      "video_thumbnail_alt": "Carica e avvia il video nel visualizzatore di galleria, {{ imageAlt }}",
+      "model_thumbnail_alt": "Carica il modello 3D nel visualizzatore di Gallery, {{ imageAlt }}"
     },
     "map": {
       "address_error": "Errore durante la ricerca dell'indirizzo",
@@ -119,7 +131,12 @@
       "read_more": "Leggi di più",
       "read_more_title": "Leggi di più: {{ title }}",
       "back_to_blog": "Torna a {{ title }}",
-      "tags": "Tag"
+      "tags": "Tag",
+      "article_with_count": {
+        "one": "1 articolo",
+        "other": "{{ count }} articoli",
+        "zero": "0 articoli"
+      }
     },
     "comments": {
       "title": "Lascia un commento",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Spedizione<\/a> calcolata al momento del pagamento.",
       "unit_price_label": "Prezzo unitario",
       "view_cart": "Visualizza carrello",
-      "availability": "Disponibilità"
+      "availability": "Disponibilità",
+      "from_lowest_price": "da {{ lowest_price }}",
+      "view_in_space": "Visualizza nel tuo spazio",
+      "view_in_space_label": "Visualizzazione nel tuo spazio, carica l'elemento nella finestra di realtà aumentata"
     }
   },
   "gift_cards": {

@@ -1,3 +1,6 @@
+{{ "https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" | script_tag }}
+{{ "http://sdks.shopifycdn.com/js-buy-sdk/v2/latest/index.umd.min.js" | script_tag }}
+
 <div class="product-template__container page-width"
   id="ProductSection-{{ section.id }}"
   data-section-id="{{ section.id }}"
@@ -11,73 +14,63 @@
   {%- assign current_variant = product.selected_or_first_available_variant -%}
   {%- assign product_image_zoom_size = '1024x1024' -%}
   {%- assign product_image_scale = '2' -%}
-  {%- assign enable_zoom = section.settings.enable_zoom -%}
+  {%- assign enable_image_zoom = section.settings.enable_image_zoom -%}
   {%- assign compare_at_price = current_variant.compare_at_price -%}
   {%- assign price = current_variant.price -%}
+  {%- assign variantId = '' -%}
 
-  {% case section.settings.image_size %}
+
+  {% case section.settings.media_size %}
     {% when 'small' %}
-      {%- assign product_image_width = 'medium-up--one-third' -%}
+      {%- assign product_media_width = 'medium-up--one-third' -%}
       {%- assign product_description_width = 'medium-up--two-thirds' -%}
-      {%- assign product_thumbnail_width = 'medium-up--one-third' -%}
       {%- assign height = 345 -%}
     {% when 'medium' %}
-      {%- assign product_image_width = 'medium-up--one-half' -%}
+      {%- assign product_media_width = 'medium-up--one-half' -%}
       {%- assign product_description_width = 'medium-up--one-half' -%}
-      {%- assign product_thumbnail_width = 'medium-up--one-quarter' -%}
       {%- assign height = 530 -%}
     {% when 'large' %}
-      {%- assign product_image_width = 'medium-up--two-thirds' -%}
+      {%- assign product_media_width = 'medium-up--two-thirds' -%}
       {%- assign product_description_width = 'medium-up--one-third' -%}
-      {%- assign product_thumbnail_width = 'medium-up--one-fifth' -%}
       {%- assign height = 720 -%}
     {% when 'full' %}
-      {%- assign product_image_width = '' -%}
+      {%- assign product_media_width = '' -%}
       {%- assign product_description_width = '' -%}
-      {%- assign product_thumbnail_width = 'medium-up--one-eighth' -%}
       {%- assign height = 1090 -%}
-      {%- assign enable_zoom = false -%}
+      {%- assign enable_image_zoom = false -%}
   {% endcase %}
 
-  <div class="grid product-single{% if section.settings.enable_payment_button %} product-single--{{ section.settings.image_size }}-image{% endif %}">
-    <div class="grid__item product-single__photos {{ product_image_width }}{% if section.settings.image_size == 'full' %} product-single__photos--full{% endif %}">
-      {%- assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image -%}
-      {% for image in product.images %}
-        {% capture img_id %}FeaturedImage-{{ section.id }}-{{ image.id }}{% endcapture %}
-        {% capture img_class %}product-featured-img{% endcapture %}
-        {% capture zoom_img_id %}FeaturedImageZoom-{{ section.id }}-{{ image.id }}{% endcapture %}
-        {% capture img_wrapper_id %}{{ zoom_img_id }}-wrapper{% endcapture %}
-        {%- assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+  <div class="grid product-single{% if section.settings.enable_payment_button %} product-single--{{ section.settings.media_size }}-media{% endif %}">
+    <div class="grid__item product-single__media-group {{ product_media_width }}{% if section.settings.media_size == 'full' %} product-single__media-group--full{% endif %}" data-product-single-media-group>
+      {%- assign featured_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
 
-        {% include 'image-style', image: image, height: height, wrapper_id: img_wrapper_id, img_id: img_id %}
-
-        <div id="{{ img_wrapper_id }}" class="product-single__photo-wrapper js">
-          <div
-          id="{{ zoom_img_id }}"
-          style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;"
-          class="product-single__photo{% if enable_zoom %} js-zoom-enabled{% endif %}{% if product.images.size > 1 %} product-single__photo--has-thumbnails{% endif %}{% unless featured_image == image %} hide{% endunless %}"
-          data-image-id="{{ image.id }}"
-          {% if enable_zoom %} data-zoom="{{ image | img_url: product_image_zoom_size, scale: product_image_scale }}"{% endif %}>
-            <img id="{{ img_id }}"
-                 class="feature-row__image {{ img_class }} lazyload{% unless featured_image == image %} lazypreload{% endunless %}"
-                 src="{{ image | img_url: '300x300' }}"
-                 data-src="{{ img_url }}"
-                 data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
-                 data-aspectratio="{{ image.aspect_ratio }}"
-                 data-sizes="auto"
-                 tabindex="-1"
-                 alt="{{ image.alt | escape }}">
-          </div>
-        </div>
-      {% endfor %}
+      {%- for media in product.media -%}
+        {% include 'media', media: media, featured_media: featured_media, height: height, enable_image_zoom: enable_image_zoom, image_zoom_size: product_image_zoom_size, image_scale: product_image_scale %}
+      {%- endfor -%}
 
       <noscript>
         {% capture product_image_size %}{{ height }}x{% endcapture %}
-        <img src="{{ featured_image | img_url: product_image_size, scale: product_image_scale }}" alt="{{ featured_image.alt }}" id="FeaturedImage-{{ section.id }}" class="product-featured-img" style="max-width: {{ height }}px;">
+        <img src="{{ featured_media | img_url: product_image_size, scale: product_image_scale }}" alt="{{ featured_media.alt }}" id="FeaturedMedia-{{ section.id }}" class="product-featured-media" style="max-width: {{ height }}px;">
       </noscript>
 
-      {% if product.images.size > 1 %}
-        {% if product.images.size > 3 %}
+      {% assign first_3d_model = product.media | where: "media_type", "model" | first %}
+
+      {%- if first_3d_model -%}
+        <button
+          aria-label="{{ 'products.product.view_in_space_label' | t }}"
+          class="product-single__view-in-space"
+          data-shopify-xr
+          data-shopify-model3d-id="{{ first_3d_model.id }}"
+          data-shopify-title="{{ product.title | escape }}"
+          data-shopify-xr-hidden
+        >
+          {% include 'icon-3d-badge-full-color' %}<span class='product-single__view-in-space-text'>{{ 'products.product.view_in_space' | t }}</span>
+        </button>
+      {%- endif -%}
+
+
+      {% if product.media.size > 1 %}
+        {% if product.media.size > 4 %}
           {%- assign enable_thumbnail_slides = true -%}
         {% endif %}
 
@@ -88,14 +81,35 @@
               <span class="icon__fallback-text">{{ 'sections.slideshow.previous_slide' | t }}</span>
             </button>
           {% endif %}
-          <ul class="grid grid--uniform product-single__thumbnails product-single__thumbnails-{{ section.id }}">
-            {% for image in product.images %}
-              <li class="grid__item {{ product_thumbnail_width }} product-single__thumbnails-item js">
-                <a href="{{ image.src | img_url: product_image_zoom_size, scale: product_image_scale }}"
+          <ul class="product-single__thumbnails product-single__thumbnails-{{ section.id }}">
+            {% for media in product.media %}
+              <li class="product-single__thumbnails-item product-single__thumbnails-item--{{ section.settings.media_size }} js">
+                <a href="{{ media.preview_image | img_url: product_image_zoom_size, scale: product_image_scale }}"
                    class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
-                   data-thumbnail-id="{{ image.id }}"
-                   {% if enable_zoom %}data-zoom="{{ image.src | img_url: product_image_zoom_size, scale: product_image_scale }}"{% endif %}>
-                     <img class="product-single__thumbnail-image" src="{{ image.src | img_url: '110x110', scale: 2 }}" alt="{{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: image.alt | escape }}">
+                   data-thumbnail-id="{{ section.id }}-{{ media.id }}"
+                   {% if enable_image_zoom %}data-zoom="{{ media.preview_image | img_url: product_image_zoom_size, scale: product_image_scale }}"{% endif %}>
+
+                    {%- capture thumbnailAlt -%}
+                      {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+                        {{ 'sections.featured_product.video_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+                      {%- elsif media.media_type == 'model' -%}
+                        {{ 'sections.featured_product.model_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+                      {%- else -%}
+                        {{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+                      {%- endif -%}
+                    {%- endcapture -%}
+
+                    <img class="product-single__thumbnail-image" src="{{ media.preview_image | img_url: '110x110', scale: 2 }}" alt="{{ thumbnailAlt }}">
+                    {%- if media.media_type == 'video' or media.media_type =='external_video' -%}
+                      <div class="product-single__thumbnail-badge">
+                        {% include 'icon-video-badge-full-color' %}
+                      </div>
+                    {%- endif -%}
+                    {%- if media.media_type == 'model' -%}
+                      <div class="product-single__thumbnail-badge">
+                        {% include 'icon-3d-badge-full-color' %}
+                      </div>
+                    {%- endif -%}
                 </a>
               </li>
             {% endfor %}
@@ -130,6 +144,15 @@
             </div>
           {%- endif -%}
 
+          <div class="tags__wrapper">
+            {% for tag in product.tags %}
+              <div class="tags__item">
+                {{ tag }}
+              </div>
+            {% endfor %}
+          </div>
+
+
           {% capture "form_classes" -%}
             product-form product-form-{{ section.id }}
             {%- unless section.settings.show_variant_labels %} product-form--hide-variant-labels {% endunless %}
@@ -161,7 +184,7 @@
             <select name="id" id="ProductSelect-{{ section.id }}" class="product-form__variants no-js">
               {% for variant in product.variants %}
                 <option value="{{ variant.id }}"
-                  {%- if variant == current_variant %} selected="selected" {%- endif -%}
+                  {%- if variant == current_variant %} selected="selected" {%-  assign variantId = variant.id -%} {%- endif -%}
                 >
                   {{ variant.title }}  {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
                 </option>
@@ -210,9 +233,18 @@
                     {% include 'icon-spinner' %}
                   </span>
                 </button>
-                {% if section.settings.enable_payment_button %}
-                  {{ form | payment_button }}
-                {% endif %}
+
+                <button class="btn product-form__cart-submit" type="button" id="BookTalentButton" name="book">
+                  Bookuj Vidle
+                </button>
+
+                {%- comment -%}
+                  Todo: Payment Button - do przeniesienia na warstwę
+                  {% if section.settings.enable_payment_button %}
+                    {{ form | payment_button }}
+                  {% endif %}
+                {%- endcomment -%}
+
               </div>
             </div>
           {% endform %}
@@ -241,7 +273,7 @@
         </div>
 
         {% if section.settings.show_share_buttons %}
-          {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+          {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product.featured_media %}
         {% endif %}
     </div>
   </div>
@@ -251,9 +283,304 @@
   <script type="application/json" id="ProductJson-{{ section.id }}">
     {{ product | json }}
   </script>
+  <script type="application/json" id="ModelJson-{{ section.id }}">
+    {{ product.media | where: 'media_type', 'model' | json }}
+  </script>
 {% endunless %}
 
+<script id="modal-container" type="text/html">
+  {% include 'product-modal' %}
+</script>
 
+<script>
+  const customTags = [ '<%', '%>' ];
+  const VIDEO_FOR = {
+    ME: 'ME',
+    SOMEONE: 'SOMEONE',
+    COMMERCIAL: 'COMMERCIAL'
+  };
+
+  const checkout = {
+    id: undefined,
+    webUrl: undefined,
+    orderStatusUrl: undefined,
+    taxExempt: undefined,
+    lineItems: undefined,
+  };
+  const variantId = '{{ variantId }}';
+  const talentName = '{{ product.title }}';
+  const encodedVariantId = window.btoa(`gid://shopify/ProductVariant/${variantId}`);
+
+  const client = ShopifyBuy.buildClient({
+    domain: 'videoup1.myshopify.com',
+    storefrontAccessToken: "df927c242fdb7923b05aecde71305f15"
+  });
+
+  function buildCustomAttributes({
+     videoFor = VIDEO_FOR.ME,
+     videoForName = 'anon',
+     videoFromName = '',
+     event = 'inne',
+     tips = '',
+     link = '',
+     allowPublication = 'true'
+  }){
+    return [
+      { key: 'video dla', value: videoFor === VIDEO_FOR.ME ? 'mnie' : 'kogoś'},
+      { key: 'imię', value: videoForName},
+      { key: 'od kogo', value: videoFromName},
+      { key: 'okazja', value: event},
+      { key: 'wskazówki dot. filmu', value: tips},
+      { key: 'opcjonalny link', value: link},
+      { key: 'zezwolenie na publikację', value: allowPublication ? 'zgoda' : 'odmowa'},
+    ];
+  }
+
+  function createLineItemsToAdd(attributes) {
+    return [
+      {
+        variantId: encodedVariantId,
+        quantity: 1,
+        customAttributes: attributes
+      }
+    ];
+  }
+
+  client.checkout.create().then(($checkout) => {
+    Object.assign(checkout, $checkout);
+  });
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const body = document.querySelector(".template-product");
+    const bookTalentBtn = document.querySelector("#BookTalentButton");
+    const modalContainer =  document.querySelector("#modal-container");
+    const modalTemplate = modalContainer.innerHTML;
+    const modalErrorMsgSelector = '#modal-form-message-error';
+
+    let videoFor = VIDEO_FOR.ME;
+
+    function renderModal() {
+      const output = Mustache.render(modalTemplate, { videoFor }, {}, customTags);
+      body.insertAdjacentHTML('afterbegin', output);
+    }
+
+    function addModalCloseBtnEventListener() {
+      const modalCloseBtn = document.querySelector(".js-modal-close");
+      const modalDomElement = document.querySelector('[role="dialog"]');
+
+      modalCloseBtn.addEventListener('click', () => {
+        modalDomElement.parentNode.removeChild(modalDomElement)
+      })
+    }
+
+    function handleShowModal() {
+      body.classList.add("relative");
+    }
+
+    function hideAllVideoForForms() {
+      const forms = document.querySelectorAll('[data-form]');
+      forms.forEach(form => form.classList.add('hidden'));
+    }
+
+    function showCorrectVideoForForm(videoFor) {
+      hideAllVideoForForms();
+      if (videoFor === VIDEO_FOR.SOMEONE) {
+        document.querySelector('[data-role="for-someone-form"]').classList.remove('hidden');
+      }
+      if (videoFor === VIDEO_FOR.ME) {
+        document.querySelector('[data-role="for-me-form"]').classList.remove('hidden');
+      }
+    }
+
+    function addVideoForEventListener() {
+      const parentElement = document.querySelector('[data-video-for]');
+      const radios = parentElement.querySelectorAll('input');
+
+      radios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          videoFor = VIDEO_FOR[e.target.value];
+          showCorrectVideoForForm(videoFor)
+        })
+      })
+    }
+
+    function showValidationMessage(modalForm, text) {
+      const msg = modalForm.querySelector(modalErrorMsgSelector);
+      msg.classList.remove('hidden');
+      msg.innerText = text;
+    }
+
+    function hideValidationMessage(modalForm) {
+      const msg = modalForm.querySelector(modalErrorMsgSelector);
+      msg.classList.add('hidden');
+    }
+
+    function addSubmitFormEventListener() {
+      const modalForm = document.querySelector('[data-role="modal-form"]');
+
+      modalForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        hideValidationMessage(modalForm);
+
+        const {values, errors} = getFormValues(modalForm);
+        const lineItemsToAdd = createLineItemsToAdd(buildCustomAttributes(values));
+
+        if (errors.length > 0) {
+          showValidationMessage(modalForm, errors.join(' '));
+          return;
+        }
+
+        client.checkout.addLineItems(checkout.id, lineItemsToAdd).then((checkout) => {
+          window.location.assign(checkout.webUrl);
+        });
+      })
+    }
+
+    bookTalentBtn.addEventListener('click', () => {
+      handleShowModal();
+      renderModal();
+      addModalCloseBtnEventListener();
+      addVideoForEventListener();
+      addSubmitFormEventListener();
+    })
+
+  });
+
+  function getVideoForWho(form) {
+    const radioForSomeoneCheckbox = form.querySelector('#radio-for-someone');
+    const videoForSomeone = radioForSomeoneCheckbox.checked;
+    if (videoForSomeone) {
+      return VIDEO_FOR.SOMEONE;
+    } else {
+      return VIDEO_FOR.ME;
+    }
+  }
+
+  function getForWhatOcasion(form) {
+    const value = form.querySelector('#wybierz-okazje').value;
+    return value === 'wybierz' ? '' : value;
+  }
+
+  function getTips(form) {
+    return form.querySelector('#moje-wskazowki').value;
+  }
+
+  function getLink(form) {
+    return form.querySelector('#properties-link').value;
+  }
+
+  function getPublicationPermission(form) {
+    return !form.querySelector('#publication').checked;
+  }
+
+  function videoForSomeoneValues(form) {
+    const forName = form.querySelector('#for-someone--for').value;
+    const fromName = form.querySelector('#for-someone--from').value;
+    return {forName, fromName}
+  }
+
+  function videoForMeValue(form) {
+    return form.querySelector('#properties-for-me').value;
+  }
+
+  function getFormValues(form) {
+    const errors = [];
+    const values = {
+      videoFor: getVideoForWho(form),
+      videoForName: '',
+      videoFromName: '',
+      ocasion: getForWhatOcasion(form),
+      tips: getTips(form),
+      link: getLink(form),
+      canPublish: getPublicationPermission(form)
+    };
+
+    if (values.videoFor === VIDEO_FOR.ME) {
+      const name = videoForMeValue(form);
+      if (!name) {
+        errors.push('Wpisz swoje imię.')
+      }
+
+      values.videoForName = name;
+    }
+
+    if (values.videoFor === VIDEO_FOR.SOMEONE) {
+      const {forName, fromName} = videoForSomeoneValues(form);
+
+      if (!forName) {
+        errors.push('Wpisz dla kogo ma być Vidla.')
+      }
+      if (!fromName) {
+        errors.push('Wpisz od kogo jest Vidla.')
+      }
+
+      values.videoForName = forName;
+      values.videoFromName = fromName;
+    }
+
+    if (!values.ocasion) {
+      errors.push('Wybierz okazję.')
+    }
+
+    if (!values.tips) {
+      errors.push(`Dodaj swoje wskazówki dla ${talentName}`)
+    }
+
+    return {
+      errors,
+      values
+    }
+  }
+</script>
+
+<style>
+  .modal--is-active {
+    z-index: 12;
+    background-color: rgba(0,0,0, 0.6);
+    display: flex;
+    justify-content: center;
+  }
+
+  .next-steps__content {
+    align-self: center;
+    background-color: white;
+    width: 700px;
+    min-height: 500px;
+  }
+
+  .modal__close {
+    padding: 25px;
+  }
+
+  .modal-content {
+    margin-top: 80px;
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .width-fluid {
+    width: 100%;
+  }
+
+  .width-half {
+    width: 50%;
+  }
+
+  .padding-r-input {
+    padding-right: 16px;
+  }
+
+  .textarea {
+    max-height: 100px;
+    width: 100%;
+  }
+</style>
 
 {% schema %}
 {
@@ -279,130 +606,6 @@
     "zh-TW": "產品頁面"
   },
   "settings": [
-    {
-      "type": "select",
-      "id": "image_size",
-      "label": {
-        "da": "Billedets størrelse",
-        "de": "Foto-Größe",
-        "en": "Image size",
-        "es": "Tamaño de la imagen",
-        "fi": "Kuvan koko",
-        "fr": "Taille des images",
-        "hi": "इमेज का आकार",
-        "it": "Dimensione immagine",
-        "ja": "画像サイズ",
-        "ko": "이미지 크기",
-        "ms": "Saiz imej",
-        "nb": "Bildestørrelse",
-        "nl": "Afbeeldingsformaat",
-        "pt-BR": "Tamanho da imagem",
-        "pt-PT": "Tamanho da imagem",
-        "sv": "Bildstorlek",
-        "th": "ขนาดรูปภาพ",
-        "zh-CN": "图片尺寸",
-        "zh-TW": "圖片尺寸"
-      },
-      "options": [
-        {
-          "value": "small",
-          "label": {
-            "da": "Lille",
-            "de": "Klein",
-            "en": "Small",
-            "es": "Pequeña",
-            "fi": "Pieni",
-            "fr": "Petite",
-            "hi": "छोटा",
-            "it": "Piccolo",
-            "ja": "小",
-            "ko": "스몰",
-            "ms": "Kecil",
-            "nb": "Liten",
-            "nl": "Klein",
-            "pt-BR": "Pequeno",
-            "pt-PT": "Pequeno",
-            "sv": "Liten",
-            "th": "เล็ก",
-            "zh-CN": "小",
-            "zh-TW": "小型"
-          }
-        },
-        {
-          "value": "medium",
-          "label": {
-            "da": "Medium",
-            "de": "Mittel",
-            "en": "Medium",
-            "es": "Mediana",
-            "fi": "Keskisuuri",
-            "fr": "Moyenne",
-            "hi": "मध्यम",
-            "it": "Medio",
-            "ja": "中",
-            "ko": "보통",
-            "ms": "Sederhana",
-            "nb": "Middels",
-            "nl": "Gemiddeld",
-            "pt-BR": "Médio",
-            "pt-PT": "Médio",
-            "sv": "Medium",
-            "th": "ปานกลาง",
-            "zh-CN": "中等",
-            "zh-TW": "中等"
-          }
-        },
-        {
-          "value": "large",
-          "label": {
-            "da": "Stor",
-            "de": "Groß",
-            "en": "Large",
-            "es": "Grande",
-            "fi": "Suuri",
-            "fr": "Grande",
-            "hi": "बड़ा",
-            "it": "Grande",
-            "ja": "大",
-            "ko": "라지",
-            "ms": "Besar",
-            "nb": "Stor",
-            "nl": "Groot",
-            "pt-BR": "Grande",
-            "pt-PT": "Grande",
-            "sv": "Stor",
-            "th": "ใหญ่",
-            "zh-CN": "大",
-            "zh-TW": "大型"
-          }
-        },
-        {
-          "value": "full",
-          "label": {
-            "da": "Fuld bredde",
-            "de": "Volle Breite",
-            "en": "Full-width",
-            "es": "Ancho completo",
-            "fi": "Täysi leveys",
-            "fr": "Pleine largeur",
-            "hi": "पूर्ण चौड़ाई",
-            "it": "Intera larghezza",
-            "ja": "全幅",
-            "ko": "전체 폭",
-            "ms": "Lebar penuh",
-            "nb": "Full bredde",
-            "nl": "Volledige breedte",
-            "pt-BR": "Largura completa",
-            "pt-PT": "Largura completa",
-            "sv": "Full bredd",
-            "th": "เต็มความกว้าง",
-            "zh-CN": "全宽",
-            "zh-TW": "完整寬度"
-          }
-        }
-      ],
-      "default": "medium"
-    },
     {
       "type": "checkbox",
       "id": "show_quantity_selector",
@@ -483,32 +686,6 @@
     },
     {
       "type": "checkbox",
-      "id": "enable_zoom",
-      "label": {
-        "da": "Aktivér billedzoom",
-        "de": "Foto-Zoom zulassen",
-        "en": "Enable image zoom",
-        "es": "Habilitar zoom de imagen",
-        "fi": "Ota kuvan zoomaus käyttöön",
-        "fr": "Activer le zoom d'image",
-        "hi": "इमेज ज़ूम सक्षम करें",
-        "it": "Abilita lo zoom dell'immagine",
-        "ja": "画像ズームを有効にする",
-        "ko": "이미지 확대 사용",
-        "ms": "Dayakan zum imej",
-        "nb": "Aktiver bildezoom",
-        "nl": "Inzoomen op afbeelding inschakelen",
-        "pt-BR": "Habilitar o zoom da imagem",
-        "pt-PT": "Ativar o zoom da imagem",
-        "sv": "Aktivera bildzoom",
-        "th": "เปิดใช้การซูมภาพ",
-        "zh-CN": "启用图片缩放",
-        "zh-TW": "啟用圖片縮放"
-      },
-      "default": true
-    },
-    {
-      "type": "checkbox",
       "id": "enable_payment_button",
       "label": {
         "da": "Vis dynamisk betalingsknap",
@@ -533,24 +710,24 @@
       },
       "info": {
         "da": "Den enkelte kunde vil se sin foretrukne betalingsmetode blandt dem, der er tilgængelige i din butik, f.eks. PayPal eller Apple Pay. [Få mere at vide](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
-        "de": "Jeder Kunde sieht seine bevorzugte Zahlungsmethode aus den in Ihrem Shop verfügbaren Zahlungsmethoden wie PayPal oder Apple Pay. [Mehr Infos](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "de": "Jeder Kunde sieht seine bevorzugte Zahlungsmethode aus den in Ihrem Shop verfügbaren Zahlungsmethoden wie PayPal oder Apple Pay. [Mehr Informationen](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "en": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "es": "Cada cliente verá su forma de pago preferida entre las disponibles en tu tienda, como PayPal o Apple Pay. [Más información](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "fi": "Kukin asiakas näkee ensisijaisen valintansa kauppasi tarjoamista maksutavoista, esim. PayPal tai Apple Pay. [Lisätietoja](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "fr": "Chaque client verra son moyen de paiement préféré parmi ceux qui sont proposés sur votre boutique, tels que PayPal ou Apple Pay. [En savoir plus](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "hi": "प्रत्येक ग्राहक आपके स्टोर पर उपलब्ध अपनी पसंदीदा भुगतान की विधि देखेंगे जैसे PayPal या Apple Pay. [अधिक जानें](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "it": "Ogni cliente vedrà il suo metodo di pagamento preferito tra quelli disponibili nel tuo negozio, come PayPal o Apple Pay. [Maggiori informazioni](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
-        "ja": "PayPalやApple Payなど、ストアで利用可能な希望の決済方法がお客様に表示されます。[もっと詳しく](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "ja": "PayPalやApple Payなど、ストアで利用可能な希望の決済方法がお客様に表示されます。[詳細情報](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "ko": "각 고객은 PayPal 또는 Apple Pay와 같이 스토어에서 사용 가능한 지불 방법을 확인할 수 있습니다. [자세히 알아보기](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "ms": "Setiap pelanggan akan melihat kaedah pembayaran keutamaan mereka dari yang tersedia di kedai anda, seperti PayPal atau Apple Pay. [Ketahui lebih lanjut](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "nb": "Hver enkelt kunde vil se sin foretrukne betalingsmåte blant de som er tilgjengelig i butikken din, som PayPal eller Apple Pay. [Finn ut mer](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "nl": "Elke klant ziet zijn of haar beschikbare voorkeursmethode om af te rekenen, zoals PayPal of Apple Pay. [Meer informatie](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
-        "pt-BR": "Cada cliente verá sua forma de pagamento preferida dentre as disponíveis na loja, como PayPal ou Apple Pay. [Saiba mais](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "pt-BR": "Cada cliente verá seu método de pagamento preferido dentre os disponíveis na loja, como PayPal ou Apple Pay. [Saiba mais](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "pt-PT": "Cada cliente irá ver o seu método de pagamento preferido entre os disponíveis na loja, como o PayPal ou Apple Pay. [Saiba mais](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "sv": "Varje kund kommer att se den föredragna betalningsmetoden från de som finns tillgängliga i din butik, till exempel PayPal eller Apple Pay. [Läs mer](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
-        "th": "ลูกค้าแต่ละรายจะเห็นวิธีการชำระเงินที่ต้องการจากวิธีที่ใช้ได้ในร้านค้าของคุณ เช่น PayPal หรือ Apple Pay [ดูข้อมูลเพิ่มเติม](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
-        "zh-CN": "每位客户都可在您商店提供的付款方式中看到他们的首选付款方式，例如 PayPal 或 Apple Pay。[了解详细信息](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
-        "zh-TW": "每位顧客都可以在您商店內開放使用的付款方式中看見他們偏好使用的方式，如 PayPal、Apple Pay 等。[深入瞭解相關資訊](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
+        "th": "ลูกค้าแต่ละรายจะเห็นวิธีการชำระเงินที่ต้องการจากวิธีที่ใช้ได้ในร้านค้าของคุณ เช่น PayPal หรือ Apple Pay [เรียนรู้เพิ่มเติม](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "zh-CN": "每位客户都可在您商店提供的付款方式中看到他们的首选付款方式，例如 PayPal 或 Apple Pay。[了解详情](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "zh-TW": "每位顧客都可以在您商店內開放使用的付款方式中看見他們偏好使用的方式，如 PayPal、Apple Pay 等。[深入瞭解](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
       },
       "default": true
     },
@@ -579,6 +756,227 @@
         "zh-TW": "顯示社群分享按鈕"
       },
       "default": true
+    },
+    {
+      "type": "header",
+      "content": {
+        "da": "Medie",
+        "de": "Medien",
+        "en": "Media",
+        "es": "Medios de comunicación",
+        "fi": "Media",
+        "fr": "Médias",
+        "hi": "मीडिया",
+        "it": "Media",
+        "ja": "メディア",
+        "ko": "미디어",
+        "ms": "Media",
+        "nb": "Medier",
+        "nl": "Media",
+        "pt-BR": "Mídia",
+        "pt-PT": "Multimédia",
+        "sv": "media",
+        "th": "สื่อ",
+        "zh-CN": "媒体",
+        "zh-TW": "媒體"
+      },
+      "info": {
+        "da": "Få mere at vide om [media types](https://help.shopify.com/manual/products/product-media)",
+        "de": "Mehr Informationen über [Medientypen ](https://help.shopify.com/manual/products/product-media)",
+        "en": "Learn more about [media types](https://help.shopify.com/manual/products/product-media)",
+        "es": "Más información sobre [tipos de archivos multimedia](https://help.shopify.com/manual/products/product-media)",
+        "fi": "Lue lisää [mediatyypeistä](https://help.shopify.com/manual/products/product-media)",
+        "fr": "En savoir plus sur les [types de supports multimédia](https://help.shopify.com/manual/products/product-media)",
+        "hi": "[मीडिया प्रकार](https://help.shopify.com/manual/products/product-media) के बारे में और जानें",
+        "it": "Scopri di più sulle [tipologie di file multimediali](https://help.shopify.com/manual/products/product-media)",
+        "ja": "[メディアのタイプ](https://help.shopify.com/manual/products/product-media) について詳しく知る",
+        "ko": "[미디어 유형](https://help.shopify.com/manual/products/product-media)에 대해 자세히 알아보기",
+        "ms": "Ketahui lebih lanjut tentang [jenis media](https://help.shopify.com/manual/products/product-media)",
+        "nb": "Lær mer om [medietyper](https://help.shopify.com/manual/products/product-media)",
+        "nl": "Meer informatie over [mediatypen](https://help.shopify.com/manual/products/product-media)",
+        "pt-BR": "Saiba mais sobre [tipos de mídia](https://help.shopify.com/manual/products/product-media)",
+        "pt-PT": "Saiba mais sobre [media types](https://help.shopify.com/manual/products/product-media)",
+        "sv": "Läs mer om [mediatyper](https://help.shopify.com/manual/products/product-media)",
+        "th": "ดูข้อมูลเพิ่มเติมเกี่ยวกับ [ประเภทของสื่อ](https://help.shopify.com/manual/products/product-media)",
+        "zh-CN": "详细了解 [媒体类型](https://help.shopify.com/manual/products/product-media)",
+        "zh-TW": "深入瞭解 [媒體類型](https://help.shopify.com/manual/products/product-media)"
+      }
+    },
+    {
+      "type": "select",
+      "id": "media_size",
+      "label": {
+        "da": "Størrelse",
+        "de": "Größe",
+        "en": "Size",
+        "es": "Tamaño",
+        "fi": "Koko",
+        "fr": "Taille",
+        "hi": "आकार",
+        "it": "Dimensione",
+        "ja": "サイズ",
+        "ko": "사이즈",
+        "ms": "Saiz",
+        "nb": "Størrelse",
+        "nl": "Grootte",
+        "pt-BR": "Tamanho",
+        "pt-PT": "Tamanho",
+        "sv": "Storlek",
+        "th": "ขนาด",
+        "zh-CN": "大小",
+        "zh-TW": "尺寸"
+      },
+      "options": [
+        {
+          "value": "small",
+          "label": {
+            "da": "Lille",
+            "de": "Klein",
+            "en": "Small",
+            "es": "Pequeño",
+            "fi": "Pieni",
+            "fr": "Petit",
+            "hi": "छोटा",
+            "it": "Piccolo",
+            "ja": "スモール",
+            "ko": "스몰",
+            "ms": "Kecil",
+            "nb": "Liten",
+            "nl": "Klein",
+            "pt-BR": "Pequeno",
+            "pt-PT": "Pequeno",
+            "sv": "Liten",
+            "th": "เล็ก",
+            "zh-CN": "小",
+            "zh-TW": "小型"
+          }
+        },
+        {
+          "value": "medium",
+          "label": {
+            "da": "Medium",
+            "de": "Mittel",
+            "en": "Medium",
+            "es": "Mediano",
+            "fi": "Keskisuuri",
+            "fr": "Moyenne",
+            "hi": "मध्यम",
+            "it": "Medio",
+            "ja": "中",
+            "ko": "보통",
+            "ms": "Sederhana",
+            "nb": "Middels",
+            "nl": "Gemiddeld",
+            "pt-BR": "Médio",
+            "pt-PT": "Médio",
+            "sv": "Medium",
+            "th": "ปานกลาง",
+            "zh-CN": "中等",
+            "zh-TW": "中等"
+          }
+        },
+        {
+          "value": "large",
+          "label": {
+            "da": "Stor",
+            "de": "Groß",
+            "en": "Large",
+            "es": "Grande",
+            "fi": "Suuri",
+            "fr": "Grande",
+            "hi": "बड़ा",
+            "it": "Grande",
+            "ja": "大",
+            "ko": "라지",
+            "ms": "Besar",
+            "nb": "Stor",
+            "nl": "Groot",
+            "pt-BR": "Grande",
+            "pt-PT": "Grande",
+            "sv": "Stor",
+            "th": "ใหญ่",
+            "zh-CN": "大",
+            "zh-TW": "大型"
+          }
+        },
+        {
+          "value": "full",
+          "label": {
+            "da": "Fuld bredde",
+            "de": "Volle Breite",
+            "en": "Full-width",
+            "es": "Ancho completo",
+            "fi": "Täysi leveys",
+            "fr": "Pleine largeur",
+            "hi": "पूर्ण चौड़ाई",
+            "it": "Intera larghezza",
+            "ja": "全幅",
+            "ko": "전체 폭",
+            "ms": "Lebar penuh",
+            "nb": "Full bredde",
+            "nl": "Volledige breedte",
+            "pt-BR": "Largura completa",
+            "pt-PT": "Largura completa",
+            "sv": "Full bredd",
+            "th": "เต็มความกว้าง",
+            "zh-CN": "全宽",
+            "zh-TW": "完整寬度"
+          }
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_zoom",
+      "label": {
+        "da": "Aktivér billedzoom",
+        "de": "Foto-Zoom zulassen",
+        "en": "Enable image zoom",
+        "es": "Habilitar zoom de imagen",
+        "fi": "Ota kuvan zoomaus käyttöön",
+        "fr": "Activer le zoom d'image",
+        "hi": "इमेज ज़ूम सक्षम करें",
+        "it": "Abilita lo zoom dell'immagine",
+        "ja": "画像ズームを有効にする",
+        "ko": "이미지 확대 사용",
+        "ms": "Dayakan zum imej",
+        "nb": "Aktiver bildezoom",
+        "nl": "Inzoomen op afbeelding inschakelen",
+        "pt-BR": "Habilitar o zoom da imagem",
+        "pt-PT": "Ativar o zoom da imagem",
+        "sv": "Aktivera bildzoom",
+        "th": "เปิดใช้การซูมภาพ",
+        "zh-CN": "启用图片缩放",
+        "zh-TW": "啟用圖片縮放"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "label": {
+        "da": "Aktivér looping af videoer",
+        "de": "Videschleife aktivieren",
+        "en": "Enable video looping",
+        "es": "Habilitar la reproducción de video en bucle",
+        "fi": "Ota käyttöön videosilmukka",
+        "fr": "Activer le bouclage de la vidéo",
+        "hi": "वीडियो लूपिंग सक्षम करें",
+        "it": "Abilita la riproduzione in loop dei video",
+        "ja": "ビデオのループを有効にする",
+        "ko": "동영상 루프",
+        "ms": "Dayakan pengulangan video",
+        "nb": "Aktiver løkkeavspilling av video",
+        "nl": "Video-looping inschakelen",
+        "pt-BR": "Habilitar loop de vídeo",
+        "pt-PT": "Ativar ciclo de vídeo",
+        "sv": "Aktivera video-loopning",
+        "th": "เปิดใช้งานการวนซ้ำวิดีโอ",
+        "zh-CN": "启用视频循环",
+        "zh-TW": "啟用影片循環功能"
+      },
+      "default": false
     }
   ]
 }

@@ -3,7 +3,7 @@
     "name": "theme_info",
     "theme_name": "Debut",
     "theme_author": "Shopify",
-    "theme_version": "14.5.0",
+    "theme_version": "16.2.0",
     "theme_documentation_url": "https:\/\/help.shopify.com\/manual\/using-themes\/themes-by-shopify\/debut",
     "theme_support_url": "https:\/\/support.shopify.com\/"
   },
@@ -762,31 +762,34 @@
           "zh-CN": "px",
           "zh-TW": "像素"
         }
+      }
+    ]
+  },
+  {
+    "name": "Search",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Product suggestions"
       },
       {
         "type": "checkbox",
-        "id": "type_bold_product_titles",
-        "label": {
-          "da": "Produkttitler med fed",
-          "de": "Produkttitel in fett",
-          "en": "Bold product titles",
-          "es": "Títulos de productos en negrita",
-          "fi": "Lihavoidut tuotenimet",
-          "fr": "Titres de produits en gras",
-          "hi": "बोल्ड उत्पाद शीर्षक",
-          "it": "Titoli dei prodotti in grassetto",
-          "ja": "太字の商品名",
-          "ko": "제품명 굵게하기",
-          "ms": "Tebalkan tajuk produk",
-          "nb": "Produkttitler i fet skrift",
-          "nl": "Vetgedrukte producttitels",
-          "pt-BR": "Títulos de produtos em negrito",
-          "pt-PT": "Títulos de produtos em negrito",
-          "sv": "Fetstilta produkttitlar",
-          "th": "ชื่อสินค้าที่เป็นตัวหนา",
-          "zh-CN": "产品标题加粗",
-          "zh-TW": "粗體標示產品名稱"
-        }
+        "id": "predictive_search_enabled",
+        "label": "Enable product suggestions",
+        "info": "This will also affect the search bar on the search results page.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_show_vendor",
+        "label": "Show vendor",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_show_price",
+        "label": "Show price",
+        "default": false
       }
     ]
   },
@@ -988,7 +991,7 @@
       {
         "type": "header",
         "content": {
-          "da": "Konti på sociale medier",
+          "da": "SoMe-konti",
           "de": "Social Media",
           "en": "Social accounts",
           "es": "Cuentas de redes sociales",
@@ -1000,8 +1003,8 @@
           "ko": "소셜 계정",
           "ms": "Akaun sosial",
           "nb": "Sosiale kontoer",
-          "nl": "Social media-accounts",
-          "pt-BR": "Contas em redes sociais",
+          "nl": "Socialmedia-accounts",
+          "pt-BR": "Contas de redes sociais",
           "pt-PT": "Contas de redes sociais",
           "sv": "Sociala konton",
           "th": "บัญชีโซเชียลมีเดีย",

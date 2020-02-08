@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "Försök med en annan sökterm eller gå tillbaka till <a href=\"{{ link }}\">hemsidan<\/a>.",
       "empty_search_message": "Sökfältet kan inte vara tomt",
-      "results_with_count": {
-        "one": "{{ count }} resultat för \"{{ terms }}\"",
-        "other": "{{ count }} resultat för \"{{ terms }}\""
-      },
       "title": "Sök på vår webbplats",
       "placeholder": "Sök",
       "submit": "Skicka",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "Sökresultat",
         "other": "Sökresultat"
+      },
+      "search_for": "Sök efter",
+      "loading": "Laddar",
+      "clear_search_term": "Rensa sökord",
+      "number_of_results": "{{ result_number }} av {{ results_count }}",
+      "products": "Produkter",
+      "number_of_results_found": "{{ results_count }} resultat hittades",
+      "one_result_found": "1 resultat hittades",
+      "no_results": "Försök med att kontrollera din stavning eller använda andra ord.",
+      "results_with_count": {
+        "one": "{{ count }} resultat för “{{ terms }}”",
+        "other": "{{ count }} resultat för “{{ terms }}”"
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "Valuta"
+    },
+    "language": {
+      "dropdown_label": "Språk"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "Utvald produkt",
-      "gallery_thumbnail_alt": "Ladda upp bild till gallerivisning, {{ imageAlt }}"
+      "gallery_thumbnail_alt": "Ladda upp bild till gallerivisning, {{ imageAlt }}",
+      "video_thumbnail_alt": "Ladda och spela upp video i Gallerivisaren, {{ imageAlt }}",
+      "model_thumbnail_alt": "Ladda upp 3D-modell till gallerivisning, {{ imageAlt }}"
     },
     "map": {
       "address_error": "Det gick inte att hitta den adressen",
@@ -119,7 +131,12 @@
       "read_more": "Läs mer",
       "read_more_title": "Läs mer: {{ title }}",
       "back_to_blog": "Gå tillbaka till {{ title }}",
-      "tags": "Taggar"
+      "tags": "Taggar",
+      "article_with_count": {
+        "one": "1 artikel",
+        "other": "{{ count }} artiklar",
+        "zero": "0 artiklar"
+      }
     },
     "comments": {
       "title": "Lämna en kommentar",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Frakt<\/a>beräknas i kassan.",
       "unit_price_label": "Enhetspris",
       "view_cart": "Visa varukorg",
-      "availability": "Tillgänglighet"
+      "availability": "Tillgänglighet",
+      "from_lowest_price": "Från {{ lowest_price }}",
+      "view_in_space": "Visa i ditt utrymme",
+      "view_in_space_label": "Visa i ditt utrymme, laddar artiklar i fönster med förstärkt verklighet"
     }
   },
   "gift_cards": {

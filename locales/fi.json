@@ -50,12 +50,7 @@
       }
     },
     "search": {
-      "no_results_html": "Kokeile toista hakutermiä tai palaa <a href=\"{{ link }}\">aloitussivulle<\/a>.",
       "empty_search_message": "Hakukenttä ei voi olla tyhjä",
-      "results_with_count": {
-        "one": "{{ count }} tulos haulla \"{{ terms }}\"",
-        "other": "{{ count }} tulosta avainsanoilla \"{{ terms }}\""
-      },
       "title": "Hae sivustoltamme",
       "placeholder": "Hae",
       "submit": "Lähetä",
@@ -63,6 +58,18 @@
       "heading": {
         "one": "Hakutulos",
         "other": "Hakutulokset"
+      },
+      "search_for": "Hae",
+      "loading": "Ladataan",
+      "clear_search_term": "Tyhjennä hakutermi",
+      "number_of_results": "{{ result_number }} \/ {{ results_count }}",
+      "products": "Tuotteet",
+      "number_of_results_found": "{{ results_count }} tulosta löytyi",
+      "one_result_found": "1 tulos löytyi",
+      "no_results": "Tarkista oikeinkirjoitus tai käytä muita sanoja.",
+      "results_with_count": {
+        "one": "{{ count }} tulosta “{{ terms }}” -termihaulla",
+        "other": "{{ count }} tulosta “{{ terms }}” -termihaulla"
       }
     },
     "newsletter_form": {
@@ -80,6 +87,9 @@
     },
     "currency": {
       "dropdown_label": "Valuutta"
+    },
+    "language": {
+      "dropdown_label": "Kieli"
     }
   },
   "sections": {
@@ -93,7 +103,9 @@
     },
     "featured_product": {
       "title": "Esittelyssä oleva tuote",
-      "gallery_thumbnail_alt": "Lataa kuva Galleria-katseluun, {{ imageAlt }}"
+      "gallery_thumbnail_alt": "Lataa kuva Galleria-katseluun, {{ imageAlt }}",
+      "video_thumbnail_alt": "Lataa video gallerian katseluohjelmaan {{ imageAlt }}",
+      "model_thumbnail_alt": "Lataa 3D-malli gallerian katseluohjelmaan, {{ imageAlt }}"
     },
     "map": {
       "address_error": "Virhe etsittäessä tätä osoitetta",
@@ -119,7 +131,12 @@
       "read_more": "Lue lisää",
       "read_more_title": "Lue lisää: {{ title }}",
       "back_to_blog": "Takaisin kohteeseen {{ title }}",
-      "tags": "Tunnisteet"
+      "tags": "Tunnisteet",
+      "article_with_count": {
+        "one": "1 artikkeli",
+        "other": "{{ count }} artikkelia",
+        "zero": "0 artikkelia"
+      }
     },
     "comments": {
       "title": "Jätä kommentti",
@@ -370,7 +387,10 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Toimituskulut<\/a> lasketaan kassalla.",
       "unit_price_label": "Yksikköhinta",
       "view_cart": "Katso ostoskori",
-      "availability": "Saatavuus"
+      "availability": "Saatavuus",
+      "from_lowest_price": "alkaen {{ lowest_price }}",
+      "view_in_space": "Näytä omassa tilassasi",
+      "view_in_space_label": "Näkymä omassa tilassasi, lataa kohteen lisätyn todellisuuden ikkunaan"
     }
   },
   "gift_cards": {
