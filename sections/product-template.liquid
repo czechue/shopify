@@ -319,19 +319,21 @@
   function buildCustomAttributes({
      videoFor = VIDEO_FOR.ME,
      videoForName = 'anon',
+     videoFromName = '',
      event = 'inne',
      tips = '',
      link = '',
      allowPublication = 'true'
   }){
     return [
-      { key: 'videoFor', value: videoFor},
-      { key: 'videoForName', value: videoForName},
-      { key: 'event', value: event},
-      { key: 'tips', value: tips},
-      { key: 'link', value: link},
-      { key: 'allowPublication', value: allowPublication},
-    ]
+      { key: 'video dla', value: videoFor === VIDEO_FOR.ME ? 'mnie' : 'kogoś'},
+      { key: 'imię', value: videoForName},
+      { key: 'od kogo', value: videoFromName},
+      { key: 'okazja', value: event},
+      { key: 'wskazówki dot. filmu', value: tips},
+      { key: 'opcjonalny link', value: link},
+      { key: 'zezwolenie na publikację', value: allowPublication ? 'zgoda' : 'odmowa'},
+    ];
   }
 
   function createLineItemsToAdd(attributes) {
@@ -348,13 +350,12 @@
     Object.assign(checkout, $checkout);
   });
 
-
   document.addEventListener("DOMContentLoaded", function() {
     const body = document.querySelector(".template-product");
     const bookTalentBtn = document.querySelector("#BookTalentButton");
     const modalContainer =  document.querySelector("#modal-container");
     const modalTemplate = modalContainer.innerHTML;
-
+    const modalErrorMsgSelector = '#modal-form-message-error';
 
     let videoFor = VIDEO_FOR.ME;
 
@@ -403,101 +404,35 @@
       })
     }
 
-    function getVideoForWho(form) {
-      const radioForSomeoneCheckbox = form.querySelector('#radio-for-someone');
-      const videoForSomeone = radioForSomeoneCheckbox.checked;
-      if (videoForSomeone) {
-        return VIDEO_FOR.SOMEONE;
-      } else {
-        return VIDEO_FOR.ME;
-      }
+    function showValidationMessage(modalForm, text) {
+      const msg = modalForm.querySelector(modalErrorMsgSelector);
+      msg.classList.remove('hidden');
+      msg.innerText = text;
     }
 
-    function getForWhatOcasion(form) {
-      const value = form.querySelector('#wybierz-okazje').value;
-      return value === 'wybierz' ? '' : value;
-    }
-
-    function getTips(form) {
-      return form.querySelector('#moje-wskazowki').value;
-    }
-
-    function getLink(form) {
-      return form.querySelector('#properties-link').value;
-    }
-
-    function getPublicationPermission(form) {
-      return !form.querySelector('#publication').checked;
-    }
-
-    function getFormValues(form) {
-      const errors = [];
-      const values = {
-        videoFor: getVideoForWho(form),
-        videoForName: '',
-        videoFromName: '',
-        ocasion: getForWhatOcasion(form),
-        tips: getTips(form),
-        link: getLink(form),
-        canPublish: getPublicationPermission(form)
-      };
-
-      if (values.videoFor === VIDEO_FOR.ME) {
-        const videoForName = form.querySelector('#properties-for-me').value;
-        if (!videoForName) {
-          errors.push('Wpisz swoje imię.')
-        }
-
-        values.videoForName = videoForName;
-      }
-
-      if (values.videoFor === VIDEO_FOR.SOMEONE) {
-        const videoForName = form.querySelector('#for-someone--for').value;
-        const videoFromName = form.querySelector('#for-someone--from').value;
-        if (!videoForName) {
-          errors.push('Wpisz dla kogo ma być Vidla.')
-        }
-        if (!videoFromName) {
-          errors.push('Wpisz od kogo jest Vidla.')
-        }
-
-        values.videoForName = videoForName;
-        values.videoFromName = videoFromName;
-      }
-
-      if (!values.ocasion) {
-        errors.push('Wybierz okazję.')
-      }
-
-      if (!values.tips) {
-        errors.push(`Dodaj swoje wskazówki dla ${talentName}`)
-      }
-
-      return {
-        errors,
-        values
-      }
-
+    function hideValidationMessage(modalForm) {
+      const msg = modalForm.querySelector(modalErrorMsgSelector);
+      msg.classList.add('hidden');
     }
 
     function addSubmitFormEventListener() {
       const modalForm = document.querySelector('[data-role="modal-form"]');
-      const lineItemsToAdd = createLineItemsToAdd(buildCustomAttributes({videoFor: VIDEO_FOR.ME, videoForName: 'chester', tips: 'spiewaj piekny cyganie'}));
 
       modalForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        hideValidationMessage(modalForm);
+
         const {values, errors} = getFormValues(modalForm);
+        const lineItemsToAdd = createLineItemsToAdd(buildCustomAttributes(values));
 
         if (errors.length > 0) {
-          console.log('THERE ARE ERRORS', errors.join(', '))
+          showValidationMessage(modalForm, errors.join(' '));
           return;
         }
-        console.log('NO ERRORS', values)
 
-        // client.checkout.addLineItems(checkout.id, lineItemsToAdd).then((checkout) => {
-        //   console.log(checkout); // Array with one additional line item
-        // });
-
+        client.checkout.addLineItems(checkout.id, lineItemsToAdd).then((checkout) => {
+          window.location.assign(checkout.webUrl);
+        });
       })
     }
 
@@ -509,7 +444,93 @@
       addSubmitFormEventListener();
     })
 
-  })
+  });
+
+  function getVideoForWho(form) {
+    const radioForSomeoneCheckbox = form.querySelector('#radio-for-someone');
+    const videoForSomeone = radioForSomeoneCheckbox.checked;
+    if (videoForSomeone) {
+      return VIDEO_FOR.SOMEONE;
+    } else {
+      return VIDEO_FOR.ME;
+    }
+  }
+
+  function getForWhatOcasion(form) {
+    const value = form.querySelector('#wybierz-okazje').value;
+    return value === 'wybierz' ? '' : value;
+  }
+
+  function getTips(form) {
+    return form.querySelector('#moje-wskazowki').value;
+  }
+
+  function getLink(form) {
+    return form.querySelector('#properties-link').value;
+  }
+
+  function getPublicationPermission(form) {
+    return !form.querySelector('#publication').checked;
+  }
+
+  function videoForSomeoneValues(form) {
+    const forName = form.querySelector('#for-someone--for').value;
+    const fromName = form.querySelector('#for-someone--from').value;
+    return {forName, fromName}
+  }
+
+  function videoForMeValue(form) {
+    return form.querySelector('#properties-for-me').value;
+  }
+
+  function getFormValues(form) {
+    const errors = [];
+    const values = {
+      videoFor: getVideoForWho(form),
+      videoForName: '',
+      videoFromName: '',
+      ocasion: getForWhatOcasion(form),
+      tips: getTips(form),
+      link: getLink(form),
+      canPublish: getPublicationPermission(form)
+    };
+
+    if (values.videoFor === VIDEO_FOR.ME) {
+      const name = videoForMeValue(form);
+      if (!name) {
+        errors.push('Wpisz swoje imię.')
+      }
+
+      values.videoForName = name;
+    }
+
+    if (values.videoFor === VIDEO_FOR.SOMEONE) {
+      const {forName, fromName} = videoForSomeoneValues(form);
+
+      if (!forName) {
+        errors.push('Wpisz dla kogo ma być Vidla.')
+      }
+      if (!fromName) {
+        errors.push('Wpisz od kogo jest Vidla.')
+      }
+
+      values.videoForName = forName;
+      values.videoFromName = fromName;
+    }
+
+    if (!values.ocasion) {
+      errors.push('Wybierz okazję.')
+    }
+
+    if (!values.tips) {
+      errors.push(`Dodaj swoje wskazówki dla ${talentName}`)
+    }
+
+    return {
+      errors,
+      values
+    }
+  }
 </script>
 
 <style>
