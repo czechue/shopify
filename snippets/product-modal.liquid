@@ -1,0 +1,76 @@
+<div class="modal modal--is-active" role="dialog" aria-modal="true" aria-labelledby="password-modal-heading">
+    <div class="modal__inner next-steps__content">
+        <button type="button" class="modal__close js-modal-close text-link">
+            {% include 'icon-close' %}
+            <span class="icon__fallback-text">{{ 'general.accessibility.close_modal' | t | json }}</span>
+        </button>
+        <div class="modal-content page-width">
+            <h4>Zamów świeżutką Vidle od {{ product.title }}</h4>
+
+            <form data-role="modal-form">
+                <p class="line-item-property__field" data-video-for>
+                    <label>To video będzie:</label>
+                    <input id="radio-for-someone" type="radio" class="required" name="properties-radio" value="SOMEONE"> <span>dla kogoś</span><br>
+                    <input id="radio-for-me" type="radio" class="required" name="properties-radio" value="ME" checked> <span>dla mnie</span><br>
+                </p>
+                <div data-form data-role="for-someone-form" class="flex hidden">
+                    <div class="width-half padding-r-input">
+                        <p class="line-item-property__field">
+                            <label for="for-someone--for">Dla:</label>
+                            <input id="for-someone--for" type="text" name="properties-for-someone--for" class="width-fluid">
+                        </p>
+                    </div>
+                    <div class="width-half padding-r-input">
+                        <p class="line-item-property__field">
+                            <label for="for-someone--from">Od:</label>
+                            <input id="for-someone--from" type="text" name="properties-for-someone--from" class="width-fluid">
+                        </p>
+                    </div>
+                </div>
+                <div data-form data-role="for-me-form">
+                    <p class="line-item-property__field">
+                        <label for="properties-for-me">Moje imię to:</label>
+                        <input id="properties-for-me" type="text" name="properties-for-me">
+                    </p>
+                </div>
+                <br>
+
+                <p class="line-item-property__field">
+                    <label>Wybierz okazję</label>
+                    <select id="wybierz-okazje" name="properties[_Wybierz okazję]">
+                        <option value="wybierz">wybierz okazję</option>
+                        <option value="urodziny">urodziny</option>
+                        <option value="imieniny">imieniny</option>
+                        <option value="walentynki">walentynki</option>
+                        <option value="dzien matki">dzień Matki</option>
+                        <option value="gratulacje">gratulacje</option>
+                        <option value="roast">roast</option>
+                        <option value="slub">ślub</option>
+                        <option value="rocznica">rocznica</option>
+                        <option value="inna">inna</option>
+                    </select>
+                </p>
+
+                <p class="line-item-property__field">
+                    <label for="moje-wskazowki">Moje wskazówki / instrukcje dla {{ product.title }}</label>
+                    <textarea class="textarea" id="moje-wskazowki" name="properties-moje-wskazowki"></textarea>
+                </p>
+
+                <p class="line-item-property__field">
+                    <label for="properties-link">Dodaj link (opcjonalne)</label>
+                    <input class="width-fluid" placeholder="https://ulubione-zdjecie/img1.jpg" id="properties-link" type="url" name="properties-link">
+                </p>
+
+                <p class="line-item-property__field">
+                    <input type="hidden" name="properties-publication" value="No">
+                    <input id="publication" type="checkbox" name="properties-publication" value="Yes">
+                    <label for="publication">Nie pozwalaj na publikację tego video na vidla.pl</label>
+                </p>
+
+                <button class="btn product-form__cart-submit" type="submit" id="properties-submit" name="book">
+                    Bookuj za {{ product.price | money  }}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
