@@ -308,6 +308,7 @@
     lineItems: undefined,
   };
   const variantId = '{{ variantId }}';
+  const talentName = '{{ product.title }}';
   const encodedVariantId = window.btoa(`gid://shopify/ProductVariant/${variantId}`);
 
   const client = ShopifyBuy.buildClient({
@@ -402,23 +403,101 @@
       })
     }
 
+    function getVideoForWho(form) {
+      const radioForSomeoneCheckbox = form.querySelector('#radio-for-someone');
+      const videoForSomeone = radioForSomeoneCheckbox.checked;
+      if (videoForSomeone) {
+        return VIDEO_FOR.SOMEONE;
+      } else {
+        return VIDEO_FOR.ME;
+      }
+    }
+
+    function getForWhatOcasion(form) {
+      const value = form.querySelector('#wybierz-okazje').value;
+      return value === 'wybierz' ? '' : value;
+    }
+
+    function getTips(form) {
+      return form.querySelector('#moje-wskazowki').value;
+    }
+
+    function getLink(form) {
+      return form.querySelector('#properties-link').value;
+    }
+
+    function getPublicationPermission(form) {
+      return !form.querySelector('#publication').checked;
+    }
+
     function getFormValues(form) {
-      const videoFor = form.querySelector('')
+      const errors = [];
+      const values = {
+        videoFor: getVideoForWho(form),
+        videoForName: '',
+        videoFromName: '',
+        ocasion: getForWhatOcasion(form),
+        tips: getTips(form),
+        link: getLink(form),
+        canPublish: getPublicationPermission(form)
+      };
+
+      if (values.videoFor === VIDEO_FOR.ME) {
+        const videoForName = form.querySelector('#properties-for-me').value;
+        if (!videoForName) {
+          errors.push('Wpisz swoje imię.')
+        }
+
+        values.videoForName = videoForName;
+      }
+
+      if (values.videoFor === VIDEO_FOR.SOMEONE) {
+        const videoForName = form.querySelector('#for-someone--for').value;
+        const videoFromName = form.querySelector('#for-someone--from').value;
+        if (!videoForName) {
+          errors.push('Wpisz dla kogo ma być Vidla.')
+        }
+        if (!videoFromName) {
+          errors.push('Wpisz od kogo jest Vidla.')
+        }
+
+        values.videoForName = videoForName;
+        values.videoFromName = videoFromName;
+      }
+
+      if (!values.ocasion) {
+        errors.push('Wybierz okazję.')
+      }
+
+      if (!values.tips) {
+        errors.push(`Dodaj swoje wskazówki dla ${talentName}`)
+      }
+
+      return {
+        errors,
+        values
+      }
+
     }
 
     function addSubmitFormEventListener() {
-      const btn = document.querySelector("#properties-submit");
       const modalForm = document.querySelector('[data-role="modal-form"]');
       const lineItemsToAdd = createLineItemsToAdd(buildCustomAttributes({videoFor: VIDEO_FOR.ME, videoForName: 'chester', tips: 'spiewaj piekny cyganie'}));
 
       modalForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        getFormValues(modalForm);
+        const {values, errors} = getFormValues(modalForm);
+
+        if (errors.length > 0) {
+          console.log('THERE ARE ERRORS', errors.join(', '))
+          return;
+        }
+        console.log('NO ERRORS', values)
 
         // client.checkout.addLineItems(checkout.id, lineItemsToAdd).then((checkout) => {
         //   console.log(checkout); // Array with one additional line item
         // });
-        console.log(e)
+
       })
     }
 
