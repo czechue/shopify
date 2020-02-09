@@ -357,6 +357,10 @@
     const modalTemplate = modalContainer.innerHTML;
     const modalErrorMsgSelector = '#modal-form-message-error';
 
+    function getModalDomElement () {
+      return document.querySelector('[role="dialog"]');
+    }
+
     let videoFor = VIDEO_FOR.ME;
 
     function renderModal() {
@@ -366,15 +370,30 @@
 
     function addModalCloseBtnEventListener() {
       const modalCloseBtn = document.querySelector(".js-modal-close");
-      const modalDomElement = document.querySelector('[role="dialog"]');
 
       modalCloseBtn.addEventListener('click', () => {
-        modalDomElement.parentNode.removeChild(modalDomElement)
+        handleCloseModal()
       })
+    }
+
+    function handleModalClickLayerListener() {
+      const modalDomElement = getModalDomElement();
+      modalDomElement.addEventListener('click', (e) => {
+        if (e.target.dataset.role === 'dialog') {
+          handleCloseModal()
+        }
+      })
+    }
+
+    function handleCloseModal() {
+      const modalDomElement = getModalDomElement();
+      modalDomElement.parentNode.removeChild(modalDomElement);
+      body.classList.remove('modal-open')
     }
 
     function handleShowModal() {
       body.classList.add("relative");
+      body.classList.add("modal-open");
     }
 
     function hideAllVideoForForms() {
@@ -440,6 +459,7 @@
       handleShowModal();
       renderModal();
       addModalCloseBtnEventListener();
+      handleModalClickLayerListener();
       addVideoForEventListener();
       addSubmitFormEventListener();
     })
@@ -534,51 +554,8 @@
 </script>
 
 <style>
-  .modal--is-active {
-    z-index: 12;
-    background-color: rgba(0,0,0, 0.6);
-    display: flex;
-    justify-content: center;
-  }
-
-  .next-steps__content {
-    align-self: center;
-    background-color: white;
-    width: 700px;
-    min-height: 500px;
-  }
-
-  .modal__close {
-    padding: 25px;
-  }
-
-  .modal-content {
-    margin-top: 80px;
-  }
-
-  .flex {
-    display: flex;
-  }
-
-  .hidden {
-    display: none !important;
-  }
-
-  .width-fluid {
-    width: 100%;
-  }
-
-  .width-half {
-    width: 50%;
-  }
-
-  .padding-r-input {
-    padding-right: 16px;
-  }
-
-  .textarea {
-    max-height: 100px;
-    width: 100%;
+  .modal-open {
+    overflow: hidden;
   }
 </style>
 
