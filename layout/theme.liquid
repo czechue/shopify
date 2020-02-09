@@ -38,6 +38,12 @@
 
   {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
 
+  {% if template == 'index' %}
+    <script>
+      window.location.replace( 'collections/all' );
+     </script>
+  {% endif %}
+
   <script>
     var theme = {
       breakpoints: {
