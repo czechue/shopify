@@ -1,11 +1,22 @@
-<div class="modal modal--is-active" role="dialog" aria-modal="true" aria-labelledby="password-modal-heading">
+<div class="modal modal--is-active" data-role="dialog" role="dialog" aria-modal="true" aria-labelledby="password-modal-heading">
     <div class="modal__inner next-steps__content">
-        <button type="button" class="modal__close js-modal-close text-link">
-            {% include 'icon-close' %}
-            <span class="icon__fallback-text">{{ 'general.accessibility.close_modal' | t | json }}</span>
-        </button>
         <div class="modal-content page-width">
-            <h4>Zamów świeżutką Vidle od {{ product.title }}</h4>
+            <button type="button" class="modal__close js-modal-close text-link">
+                {% include 'icon-close' %}
+                <span class="icon__fallback-text">{{ 'general.accessibility.close_modal' | t | json }}</span>
+            </button>
+
+            <h3>Zamów Vidle od {{ product.title }}</h3>
+
+            <div class="rte delivery-info">
+                <h4>Jak to działa?</h4>
+                <ul>
+                    <li><b>{{ product.title }}</b> ma 7 dni na realizację Twojej prośby.</li>
+                    <li>Rachunek zostanie przesłany na wskazany przez Ciebie adres email, zgodnie z <a href="#">Informacją o dostarczeniu</a></b> </li>
+                    <li>Gdy Twoja prośba zostanie zrealizowana - poinformujemy Cię mailem z video, linkiem do udostępnienia lub ściągnięcia Vidli.</li>
+                    <li>Jeśli z jakiegoś powodu Twoja Vidla nie zostanie zrealizowana, zwrócimy Ci pieniądze w ciągu 5-7 dni roboczych.</li>
+                </ul>
+            </div>
 
             <form data-role="modal-form">
                 <p class="line-item-property__field" data-video-for>
@@ -76,3 +87,62 @@
         </div>
     </div>
 </div>
+
+<style>
+    .modal--is-active {
+        z-index: 12;
+        background-color: rgba(0,0,0, 0.6);
+        display: flex;
+        justify-content: center;
+    }
+
+    .next-steps__content {
+        align-self: center;
+        background-color: white;
+        width: 700px;
+        min-height: 500px;
+        overflow: scroll;
+    }
+
+    .modal-content {
+        padding-top: 70px;
+        padding-bottom: 70px;
+        position: relative;
+    }
+
+    .modal__close {
+        position: absolute;
+        padding: 25px;
+    }
+
+    .flex {
+        display: flex;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .width-fluid {
+        width: 100%;
+    }
+
+    .width-half {
+        width: 50%;
+    }
+
+    .padding-r-input {
+        padding-right: 16px;
+    }
+
+    .textarea {
+        max-height: 100px;
+        width: 100%;
+    }
+
+    .delivery-info {
+        background-color: #ffd8b8;
+        padding: 16px;
+        margin-bottom: 24px;
+    }
+</style>
