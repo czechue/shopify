@@ -3,7 +3,7 @@
 <div id="order-status-container"></div>
 
 <script id="order-status-template" type="text/html">
-    <h2 class="<% orderStatus.className %>">Status zamówienia: <% orderStatus.text %></h2>
+    <h2 class="<% orderStatus.className %> status">Status zamówienia: <% orderStatus.text %></h2>
     <hr>
     <ul class="rtl">
         <li>Realizowane przez: <b><a class="link" href="<% productUrl %>"><% productId %></a></b></li>
@@ -183,18 +183,30 @@ renderOrder();
 <style>
 .color-new {
     background-color: #398D39;
+    color: #EEEEEE;
 }
+
 .color-canceled {
     background-color: #b04747;
+    color: #EEEEEE;
 }
+
 .color-done {
     background-color: #398D39;
+    color: #EEEEEE;
 }
+
 .color-in-progress {
     background-color: #D9B97D;
 }
+
 .color-error {
     background-color: #b04747;
+    color: #EEEEEE;
+}
+
+.status {
+    padding: 16px;
 }
 
 .delivery-info {
@@ -209,5 +221,5 @@ renderOrder();
 {
     "name": "order-status",
     "settings": []
-  }
+}
 {% endschema %}
