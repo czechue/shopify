@@ -3,9 +3,8 @@
 <div id="order-status-container"></div>
 
 <script id="order-status-template" type="text/html">
-    <h2>
-        Status zamówienia: <% orderStatus %>
-    </h2>
+    <h2 class="<% orderStatus.className %>">Status zamówienia: <% orderStatus.text %></h2>
+    <hr>
     <ul class="rtl">
         <li>Realizowane przez: <b><a class="link" href="<% productUrl %>"><% productId %></a></b></li>
         <li>Video od: <b><% fromName %></b></li>
@@ -19,8 +18,16 @@
         <li><% videoType %></li>
         <br>
         <li>E-mail dostawy: <b><% contactEmail %></b> </li>
-
     </ul>
+    <div class="rte delivery-info">
+        <h4>Jak to działa?</h4>
+        <ul>
+            <li><b><% productId %></b> ma 7 dni na realizację Twojej prośby.</li>
+            <li>Rachunek zostanie przesłany na wskazany przez Ciebie adres email, zgodnie z <a href="#">Informacją o dostarczeniu</a></b> </li>
+            <li>Gdy Twoja prośba zostanie zrealizowana - poinformujemy Cię mailem z video, linkiem do udostępnienia lub ściągnięcia Vidli.</li>
+            <li>Jeśli z jakiegoś powodu Twoja Vidla nie zostanie zrealizowana, zwrócimy Ci pieniądze w ciągu 5-7 dni roboczych.</li>
+        </ul>
+    </div>
 </script>
 
 <script>
@@ -62,7 +69,7 @@ const response = {
   "publicVideo": true,
   "orderStatus": OrderStatus.NEW,
   orderDescription: {
-      orderFor: "ME",
+      orderFor: OrderFor.ME,
       "forName": "Jedrzej",
       "fromName": "Czester",
       "occasion": Occasion.OTHER,
@@ -130,21 +137,39 @@ function responseMapper({
 
 function orderStatusMapper(status) {
     if (status === OrderStatus.NEW) {
-        return "Nowe"
+        return {
+            text: "Nowe",
+            className: "color-new"
+        }
     }
     if (status === OrderStatus.CANCELED) {
-        return "Anulowane"
+        return {
+            text: "Anulowane",
+            className: "color-canceled"
+        }
     }
     if (status === OrderStatus.DONE) {
-        return "Zrealizowane"
+        return {
+            text: "Zrealizowane",
+            className: "color-done"
+        }
     }
     if (status === OrderStatus.IN_PROGRESS) {
-        return "W trakcie"
+        return {
+            text: "W trakcie",
+            className: "color-in-progress"
+        }
     }
     if (status === OrderStatus.ERROR) {
-        return "Błąd podczas realizacji"
+        return {
+            text: "Błąd podczas realizacji",
+            className: "color-new"
+        }
     }
-    return "Błąd podczas realizacji"
+    return {
+            text: "Błąd podczas realizacji",
+            className: "color-error"
+        }
 }
 
 function renderOrder() {
@@ -154,6 +179,31 @@ function renderOrder() {
 
 renderOrder();
 </script>
+
+<style>
+.color-new {
+    background-color: #398D39;
+}
+.color-canceled {
+    background-color: #b04747;
+}
+.color-done {
+    background-color: #398D39;
+}
+.color-in-progress {
+    background-color: #D9B97D;
+}
+.color-error {
+    background-color: #b04747;
+}
+
+.delivery-info {
+    background-color: #ffd8b8;
+    padding: 16px;
+    margin-bottom: 24px;
+    margin-top: 55px;
+}
+</style>
 
 {% schema %}
 {
