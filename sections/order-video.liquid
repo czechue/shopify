@@ -1,41 +1,53 @@
 {{ "https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" | script_tag }}
-
+{{ "https://cdn.plyr.io/3.5.10/plyr.js" | script_tag }}
 
 <div id="order-video-container" class="container"></div>
 
 <script id="order-video-template" type="text/html">
-    <video id="order-video" controls crossorigin playsinline>
+    <h3>Video dla: <% videoFor %> </h3>
+
+    <video id="order-video" class="order-video" controls crossorigin playsinline>
         <source 
-        src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" 
+        src="<% videoSrc %>" 
         type="video/mp4"
-        size="720" />
+        />
     </video>
 </script>
 
-{{ "https://cdn.plyr.io/3.5.10/plyr.js" | script_tag }}
+
 <script>
 const customTags = [ '<%', '%>' ];
 const container = document.querySelector('#order-video-container');
 const template = document.querySelector('#order-video-template').innerHTML;
 
+const player = new Plyr('#order-video');
+
 document.addEventListener("DOMContentLoaded", function() {
-    console.log('test')
-    function renderOrder() {
-        const output = Mustache.render(template, {}, {}, customTags);
+
+    // todo: this object will be from AJAX response
+    const orderDetails = {
+        videoSrc: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        videoFor: 'Jędrek'
+    }
+
+    function renderVideo() {
+        const output = Mustache.render(template, {...orderDetails}, {}, customTags);
         container.insertAdjacentHTML('afterbegin', output);
     };
 
-    renderOrder();
+    renderVideo();
 })
-
-const player = new Plyr('#order-video');
-
 </script>
 
 <style>
 .container {
 	margin: 50px auto;
 	max-width: 500px;
+}
+
+.order-video {
+    max-width: 100%;
+    min-width: 100%;
 }
 </style>
 
