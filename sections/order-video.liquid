@@ -1,5 +1,4 @@
 {{ "https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" | script_tag }}
-{{ "https://cdn.plyr.io/3.5.10/plyr.js" | script_tag }}
 
 <div id="order-video-container" class="container"></div>
 
@@ -14,13 +13,10 @@
     </video>
 </script>
 
-
 <script>
 const customTags = [ '<%', '%>' ];
 const container = document.querySelector('#order-video-container');
 const template = document.querySelector('#order-video-template').innerHTML;
-
-const player = new Plyr('#order-video');
 
 document.addEventListener("DOMContentLoaded", function() {
 

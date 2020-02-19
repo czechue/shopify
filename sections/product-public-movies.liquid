@@ -1,3 +1,5 @@
+{{ "https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" | script_tag }}
+
 {%- if section.settings.show_product_public_movies -%}
   <div class="product-recommendations__inner">
     <div class="page-width">
@@ -6,23 +8,55 @@
         <h2>{{ section.settings.heading | escape }}</h2>
       </div>
     {%- endif -%}
-      <ul class="grid grid--uniform grid--view-items">
-      
-          <li class="grid__item small--one-half medium-up--one-quarter">
-            {% include 'product-card-grid', max_height: 250, product: product, show_vendor: section.settings.show_vendor %}
-          </li>
-          <li class="grid__item small--one-half medium-up--one-quarter">
-            {% include 'product-card-grid', max_height: 250, product: product, show_vendor: section.settings.show_vendor %}
-          </li>
-          <li class="grid__item small--one-half medium-up--one-quarter">
-            {% include 'product-card-grid', max_height: 250, product: product, show_vendor: section.settings.show_vendor %}
-          </li>
-      
+      <ul data-role="public-video-list" class="grid grid--uniform grid--view-items">
       </ul>
     </div>
   </div>
 {%- endif -%}
 
+<script data-role="public-video" type="text/html">
+  <li class="grid__item small--one-half medium-up--one-quarter">
+    <video id="order-video" class="order-video" controls crossorigin playsinline>
+        <source 
+        src="<% src %>"
+        type="video/mp4"
+        />
+    </video>
+  </li>
+</script>
+
+<script>
+  const videoList = document.querySelector('[data-role="public-video-list"]');
+  const videoTemplate = document.querySelector('[data-role="public-video"]').innerHTML;
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const videos = [
+    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
+    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
+    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
+    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
+    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
+    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
+  
+    ]
+    function renderList() {
+      const output = videos.map(src => {
+        return Mustache.render(videoTemplate, {src }, {}, customTags)
+      }).join('')
+      videoList.insertAdjacentHTML('afterbegin', output);
+    }
+
+    renderList();
+  })
+
+</script>
+
+<style>
+.order-video {
+  max-width: 100%;
+  min-width: 100%;
+}
+</style>
 
 {% schema %}
 {
