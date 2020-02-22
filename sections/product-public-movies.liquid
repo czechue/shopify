@@ -18,7 +18,7 @@
   <li class="grid__item small--one-half medium-up--one-quarter">
     <video id="order-video" class="order-video" controls crossorigin playsinline>
         <source 
-        src="<% src %>"
+        src="<% videoUrl %>"
         type="video/mp4"
         />
     </video>
@@ -29,19 +29,62 @@
   const videoList = document.querySelector('[data-role="public-video-list"]');
   const videoTemplate = document.querySelector('[data-role="public-video"]').innerHTML;
 
+  const videos = [
+    {
+      "id": 0,
+      "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "productId": "pazura",
+      "publicVideo": true,
+      "orderDescription": {
+          "orderFor": "SOMEBODY",
+          "forName": "Jedrzej",
+          "fromName": "Czester",
+          "occasion": "VALENTINES_DAY",
+      },
+      "videoDescription": {
+        "guid": "bbdbd15a-4ba1-428a-9678-a42e305d548d",
+        "thumbnail": [
+            "s3://vidla-vod-destination-rmvjm4q4nxid/bbdbd15a-4ba1-428a-9678-a42e305d548d/thumbnails/IMG_2636_tumb.0000001.jpg"
+          ],
+          "mp4Urls": [
+            "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4"
+         ],
+        "hls": "https://d36wx9r9cy6ygz.cloudfront.net/out/v1/c714171d084a410a991782c76fec1ec2/be9fe0a2e7bf47e49b0f2bb9dcd3ceda/a6f0c469475b40ae91fdb06ea6047339/index.m3u8"
+      }
+    },
+    {
+      "id": 1,
+      "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "productId": "pazura",
+      "publicVideo": true,
+      "orderDescription": {
+          "orderFor": "SOMEBODY",
+          "forName": "Jedrzej",
+          "fromName": "Czester",
+          "occasion": "VALENTINES_DAY",
+      },
+      "videoDescription": {
+        "guid": "bbdbd15a-4ba1-428a-9678-a42e305d548d",
+        "thumbnail": [
+            "s3://vidla-vod-destination-rmvjm4q4nxid/bbdbd15a-4ba1-428a-9678-a42e305d548d/thumbnails/IMG_2636_tumb.0000001.jpg"
+          ],
+          "mp4Urls": [
+            "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4"
+         ],
+        "hls": "https://d36wx9r9cy6ygz.cloudfront.net/out/v1/c714171d084a410a991782c76fec1ec2/be9fe0a2e7bf47e49b0f2bb9dcd3ceda/a6f0c469475b40ae91fdb06ea6047339/index.m3u8"
+      }
+    }
+  ]
+
   document.addEventListener("DOMContentLoaded", function() {
-    const videos = [
-    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
-    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
-    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
-    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
-    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
-    "https://d36wx9r9cy6ygz.cloudfront.net/e25af368-d8d5-4c63-9c5d-6ea0a044c9e5/mp4/IMG_2636_Mp4_Avc_Aac_16x9_1280x720p_24Hz_4.5Mbps_qvbr.mp4",
-  
-    ]
+    
     function renderList() {
-      const output = videos.map(src => {
-        return Mustache.render(videoTemplate, {src }, {}, customTags)
+      const output = videos.map(({ orderDescription, videoDescription }) => {
+        const { mp4Urls, thumbnail } = videoDescription;
+        const videoUrl = mp4Urls[0];
+        const placeholderImage = thumbnail[0];
+
+        return Mustache.render(videoTemplate, { videoUrl }, {}, customTags)
       }).join('')
       videoList.insertAdjacentHTML('afterbegin', output);
     }
