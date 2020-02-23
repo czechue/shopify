@@ -16,6 +16,10 @@
 
 <script data-role="public-video" type="text/html">
   <li class="grid__item small--one-half medium-up--one-quarter">
+    <div class="flex-parent">
+      <span class="title-truncated"><% title %></span>
+    </div>
+    <a class="video-link" href="https://vidla.pl/pages/order-video?productId=<% productId %>">Więcej</a>
     <video id="order-video" class="order-video" controls crossorigin playsinline>
         <source 
         src="<% videoUrl %>"
@@ -25,8 +29,38 @@
   </li>
 </script>
 
+<style>
+.order-video {
+  margin-top: 8px;
+  max-width: 100%;
+  min-width: 100%;
+}
+
+.flex-parent {
+  display: flex;
+  align-items: center;
+  padding: 4px 4px 0 4px;
+}
+
+.title-truncated {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.video-link {
+  font-size: 10px;
+  padding-left: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+</style>
+
 <script>
-  const videoList = document.querySelector('[data-role="public-video-list"]');
+  const videoListContainer = document.querySelector('[data-role="public-video-list"]');
   const videoTemplate = document.querySelector('[data-role="public-video"]').innerHTML;
 
   const videos = [
@@ -37,8 +71,8 @@
       "publicVideo": true,
       "orderDescription": {
           "orderFor": "SOMEBODY",
-          "forName": "Jedrzej",
-          "fromName": "Czester",
+          "forName": "Jedrzeja Elodlugie nazwisko",
+          "fromName": "Czestera",
           "occasion": "VALENTINES_DAY",
       },
       "videoDescription": {
@@ -59,8 +93,8 @@
       "publicVideo": true,
       "orderDescription": {
           "orderFor": "SOMEBODY",
-          "forName": "Jedrzej",
-          "fromName": "Czester",
+          "forName": "Jedrzeja",
+          "fromName": "Czestera",
           "occasion": "VALENTINES_DAY",
       },
       "videoDescription": {
@@ -79,14 +113,19 @@
   document.addEventListener("DOMContentLoaded", function() {
     
     function renderList() {
-      const output = videos.map(({ orderDescription, videoDescription }) => {
+      const output = videos.map(({ orderDescription, videoDescription, productId }) => {
         const { mp4Urls, thumbnail } = videoDescription;
+        const { orderFor, fromName, forName } = orderDescription;
         const videoUrl = mp4Urls[0];
         const placeholderImage = thumbnail[0];
 
-        return Mustache.render(videoTemplate, { videoUrl }, {}, customTags)
+        const title = orderFor === "SOMEBODY" ? 
+          `od ${fromName} dla ${forName}` :
+          `dla ${forName}`;
+
+        return Mustache.render(videoTemplate, { videoUrl, title, productId }, {}, customTags)
       }).join('')
-      videoList.insertAdjacentHTML('afterbegin', output);
+      videoListContainer.insertAdjacentHTML('afterbegin', output);
     }
 
     renderList();
@@ -95,10 +134,7 @@
 </script>
 
 <style>
-.order-video {
-  max-width: 100%;
-  min-width: 100%;
-}
+
 </style>
 
 {% schema %}
