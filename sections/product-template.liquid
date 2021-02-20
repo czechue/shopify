@@ -295,6 +295,7 @@
 </script>
 
 <script>
+  // Modal Controller
   const customTags = [ '<%', '%>' ];
   const VIDEO_FOR = {
     ME: 'ME',
@@ -313,6 +314,7 @@
   const talentName = '{{ product.title }}';
   const encodedVariantId = window.btoa(`gid://shopify/ProductVariant/${variantId}`);
 
+  // TODO: move to schema variables
   const client = ShopifyBuy.buildClient({
     domain: 'vidla.pl',
     storefrontAccessToken: "550778bc0e5ac2658a3e81e2a1d0004e"

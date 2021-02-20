@@ -1,0 +1,225 @@
+{{ "https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" | script_tag }}
+
+<div id="order-status-container"></div>
+
+<script id="order-status-template" type="text/html">
+    <h2 class="<% orderStatus.className %> status">Status zamówienia: <% orderStatus.text %></h2>
+    <hr>
+    <ul class="rtl">
+        <li>Realizowane przez: <b><a class="link" href="<% productUrl %>"><% productId %></a></b></li>
+        <li>Video od: <b><% fromName %></b></li>
+        <li>Video dla: <b><% forName %></b></li>
+        <br>
+        <li>
+            Instrukcja:
+            <p><% description %></p>
+        </li>
+        <br>
+        <li><% videoType %></li>
+        <br>
+        <li>E-mail dostawy: <b><% contactEmail %></b> </li>
+    </ul>
+    <div class="rte delivery-info">
+        <h4>Jak to działa?</h4>
+        <ul>
+            <li><b><% productId %></b> ma 7 dni na realizację Twojej prośby.</li>
+            <li>Rachunek zostanie przesłany na wskazany przez Ciebie adres email, zgodnie z <a href="#">Informacją o dostarczeniu</a></b> </li>
+            <li>Gdy Twoja prośba zostanie zrealizowana - poinformujemy Cię mailem z video, linkiem do udostępnienia lub ściągnięcia Vidli.</li>
+            <li>Jeśli z jakiegoś powodu Twoja Vidla nie zostanie zrealizowana, zwrócimy Ci pieniądze w ciągu 5-7 dni roboczych.</li>
+        </ul>
+    </div>
+</script>
+
+<script>
+const productsBaseUrl = 'https://vidla.pl/products/';
+const customTags = [ '<%', '%>' ];
+const container = document.querySelector('#order-status-container');
+const template = document.querySelector('#order-status-template').innerHTML;
+
+const OrderStatus = {
+    NEW: "NEW",
+    IN_PROGRESS: "IN_PROGRESS",
+    ERROR: "ERROR",
+    DONE: "DONE",
+    CANCELED: "CANCELED"
+};
+const OrderFor = {
+    ME: "ME",
+    SOMEBODY: "SOMEBODY"
+};
+const Occasion = {
+    BIRTHDAY: "BIRTHDAY", 
+    NAME_DAY: "NAME_DAY", 
+    VALENTINES_DAY: "VALENTINES_DAY", 
+    MOTHERS_DAY: "MOTHERS_DAY", 
+    CONGRATULATIONS: "CONGRATULATIONS", 
+    ROAST: "ROAST", 
+    WEDDING: "WEDDING", 
+    ANNIVERSARY: "ANNIVERSARY", 
+    OTHER: "OTHER"
+}
+
+const response = {
+  id: 0,
+  "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "contactEmail": "test@test.test",
+  "productId": "Mike Tyson",
+  "ShopifyOrderId": "string",
+  "closed": true,
+  "publicVideo": true,
+  "orderStatus": OrderStatus.NEW,
+  orderDescription: {
+      orderFor: OrderFor.ME,
+      "forName": "Jedrzej",
+      "fromName": "Czester",
+      "occasion": Occasion.OTHER,
+      "description": "Hello, could you say in polish “chrząszcz brzmi w trzcinie w Szczebrzeszynie” with greeting to my friend Czester.",
+      "optionalUrl": "https://example.com"
+  },
+  videoDescription: {
+      "downloadUrl": {
+          "quality720p": "https://"
+      },
+      "streamingUrl": {
+          "quality720p": "https://",
+          "quality360p": "https://"
+      }  
+  }
+}
+
+function responseMapper({
+  id,
+  uuid,
+  contactEmail,
+  productId,
+  ShopifyOrderId,
+  closed,
+  publicVideo,
+  orderStatus = "NEW",
+  orderDescription: {
+      orderFor,
+      forName,
+      fromName,
+      occasion,
+      description,
+      optionalUrl
+  } = {},
+  videoDescription: {
+      downloadUrl = {},
+      streamingUrl = {}
+  } = {}
+} = {}) {
+    return {
+        id,
+        uuid,
+        contactEmail,
+        productId,
+        productUrl: `${productsBaseUrl}${decodeURIComponent(productId).replace(' ', '-')}`,
+        ShopifyOrderId,
+        closed,
+        videoType: publicVideo ? 'Video publiczne' : 'Video prywatne',
+        orderStatus: orderStatusMapper(orderStatus),
+        orderFor,
+        forName,
+        fromName,
+        occasion,
+        description,
+        optionalUrl,
+        downloadUrl: {
+            quality720p: downloadUrl.quality720p
+        },
+        streamingUrl: {
+            quality720p: streamingUrl.quality720p,
+            quality360p: streamingUrl.quality360p,
+        } 
+    }
+};
+
+function orderStatusMapper(status) {
+    if (status === OrderStatus.NEW) {
+        return {
+            text: "Nowe",
+            className: "color-new"
+        }
+    }
+    if (status === OrderStatus.CANCELED) {
+        return {
+            text: "Anulowane",
+            className: "color-canceled"
+        }
+    }
+    if (status === OrderStatus.DONE) {
+        return {
+            text: "Zrealizowane",
+            className: "color-done"
+        }
+    }
+    if (status === OrderStatus.IN_PROGRESS) {
+        return {
+            text: "W trakcie",
+            className: "color-in-progress"
+        }
+    }
+    if (status === OrderStatus.ERROR) {
+        return {
+            text: "Błąd podczas realizacji",
+            className: "color-new"
+        }
+    }
+    return {
+            text: "Błąd podczas realizacji",
+            className: "color-error"
+        }
+}
+
+function renderOrder() {
+    const output = Mustache.render(template, { ...responseMapper(response) }, {}, customTags);
+    container.insertAdjacentHTML('afterbegin', output);
+};
+
+renderOrder();
+</script>
+
+<style>
+.color-new {
+    background-color: #398D39;
+    color: #EEEEEE;
+}
+
+.color-canceled {
+    background-color: #b04747;
+    color: #EEEEEE;
+}
+
+.color-done {
+    background-color: #398D39;
+    color: #EEEEEE;
+}
+
+.color-in-progress {
+    background-color: #D9B97D;
+}
+
+.color-error {
+    background-color: #b04747;
+    color: #EEEEEE;
+}
+
+.status {
+    padding: 16px;
+}
+
+.delivery-info {
+    background-color: #ffd8b8;
+    padding: 16px;
+    margin-bottom: 24px;
+    margin-top: 55px;
+}
+</style>
+
+{% schema %}
+{
+    "name": "order-status",
+    "settings": []
+}
+{% endschema %}

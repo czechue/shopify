@@ -1,0 +1,55 @@
+{{ "https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" | script_tag }}
+
+<div id="order-video-container" class="container"></div>
+
+<script id="order-video-template" type="text/html">
+    <h3>Video dla: <% videoFor %> </h3>
+
+    <video id="order-video" class="order-video" controls crossorigin playsinline>
+        <source 
+        src="<% videoSrc %>" 
+        type="video/mp4"
+        />
+    </video>
+</script>
+
+<script>
+const customTags = [ '<%', '%>' ];
+const container = document.querySelector('#order-video-container');
+const template = document.querySelector('#order-video-template').innerHTML;
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    // todo: this object will be from AJAX response
+    const orderDetails = {
+        videoSrc: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        videoFor: 'Jędrek'
+    }
+
+    function renderVideo() {
+        const output = Mustache.render(template, {...orderDetails}, {}, customTags);
+        container.insertAdjacentHTML('afterbegin', output);
+    };
+
+    renderVideo();
+})
+</script>
+
+<style>
+.container {
+	margin: 50px auto;
+	max-width: 500px;
+}
+
+.order-video {
+    max-width: 100%;
+    min-width: 100%;
+}
+</style>
+
+{% schema %}
+{
+    "name": "order-video",
+    "settings": []
+}
+{% endschema %}
